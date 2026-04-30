@@ -1,9 +1,24 @@
 const STORAGE_KEY = "digital-menu-platform-v3";
 const LEGACY_KEYS = ["digital-menu-demo-v2", "digital-menu-demo-v1"];
 const SUPPORTED_LANGUAGES = ["de", "en"];
+const BRAND_COLORS = {
+  softGrey: "#eeeeee",
+  tealBlue: "#64cac3",
+  deepCyan: "#176b85",
+  darkNavy: "#053b50",
+};
+const OPENING_DAYS = [
+  { id: "monday", de: "Montag", en: "Monday" },
+  { id: "tuesday", de: "Dienstag", en: "Tuesday" },
+  { id: "wednesday", de: "Mittwoch", en: "Wednesday" },
+  { id: "thursday", de: "Donnerstag", en: "Thursday" },
+  { id: "friday", de: "Freitag", en: "Friday" },
+  { id: "saturday", de: "Samstag", en: "Saturday" },
+  { id: "sunday", de: "Sonntag", en: "Sunday" },
+];
 
 const defaultCover =
-  "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 700'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' x2='1' y1='0' y2='1'%3E%3Cstop stop-color='%23ff6b35'/%3E%3Cstop offset='0.55' stop-color='%23102027'/%3E%3Cstop offset='1' stop-color='%232f9e7e'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='1200' height='700' fill='url(%23g)'/%3E%3Cpath d='M120 500c170-145 320-145 490 0s320 145 490 0v200H120z' fill='%23ffffff' fill-opacity='0.14'/%3E%3Ccircle cx='230' cy='170' r='110' fill='%23ffffff' fill-opacity='0.14'/%3E%3Ccircle cx='930' cy='500' r='170' fill='%23ffffff' fill-opacity='0.1'/%3E%3C/svg%3E";
+  "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 700'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' x2='1' y1='0' y2='1'%3E%3Cstop stop-color='%23053b50'/%3E%3Cstop offset='0.58' stop-color='%23176b85'/%3E%3Cstop offset='1' stop-color='%2364cac3'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='1200' height='700' fill='url(%23g)'/%3E%3Cpath d='M120 500c170-145 320-145 490 0s320 145 490 0v200H120z' fill='%23eeeeee' fill-opacity='0.18'/%3E%3Ccircle cx='230' cy='170' r='110' fill='%23eeeeee' fill-opacity='0.14'/%3E%3Ccircle cx='930' cy='500' r='170' fill='%2364cac3' fill-opacity='0.16'/%3E%3C/svg%3E";
 
 const copy = {
   de: {
@@ -17,6 +32,8 @@ const copy = {
     buttonColor: "Button-Farbe",
     cancel: "Abbrechen",
     category: "Kategorie",
+    categoryCount: "Kategorien",
+    categoryStats: "Gerichte pro Kategorie",
     confirmDeleteCategory: "Diese Kategorie und alle zugehörigen Gerichte werden gelöscht.",
     confirmDeleteItem: "Dieses Gericht wird gelöscht.",
     confirmDeleteTitle: "Löschen bestätigen",
@@ -29,8 +46,20 @@ const copy = {
     demoLogin: "Demo-Login",
     email: "E-Mail",
     emptyCategory: "In dieser Kategorie gibt es noch keine Gerichte.",
+    edit: "Bearbeiten",
     invalidLogin: "E-Mail oder Passwort ist falsch.",
     itemPhoto: "Gerichtfoto",
+    itemTotal: "Gerichte",
+    messageCategoryAdded: "Kategorie wurde hinzugefügt.",
+    messageDeleted: "Erfolgreich gelöscht.",
+    messageItemAdded: "Gericht wurde hinzugefügt.",
+    messageItemUpdated: "Gericht wurde aktualisiert.",
+    messageLinkCopied: "Link wurde kopiert.",
+    messagePasswordReset: "Passwort wurde aktualisiert.",
+    messageQrDownloaded: "QR-Code wurde heruntergeladen.",
+    messageRestaurantCreated: "Restaurantkonto wurde erstellt.",
+    messageRestaurantSaved: "Erfolgreich gespeichert.",
+    messageThemeChanged: "Design wurde aktualisiert.",
     login: "Einloggen",
     logoColor: "Logo-Hintergrundfarbe",
     logoPhoto: "Restaurantlogo",
@@ -38,6 +67,8 @@ const copy = {
     noDescription: "Keine Beschreibung hinzugefügt.",
     noItems: "Noch keine Gerichte vorhanden.",
     noResults: "Keine passenden Gerichte gefunden.",
+    closed: "Geschlossen",
+    openingHours: "Öffnungszeiten",
     password: "Passwort",
     photo: "Foto",
     priceEuro: "Preis (€)",
@@ -46,6 +77,11 @@ const copy = {
     searchPlaceholder: "Im Menü suchen",
     textColor: "Textfarbe",
     updateMenu: "Menü aktualisieren",
+    updateItem: "Gericht aktualisieren",
+    visitorStats: "Besucherstatistik",
+    viewsMonth: "Diesen Monat",
+    viewsTotal: "Gesamt",
+    viewsWeek: "Diese Woche",
   },
   en: {
     add: "Add",
@@ -58,6 +94,8 @@ const copy = {
     buttonColor: "Button color",
     cancel: "Cancel",
     category: "Category",
+    categoryCount: "Categories",
+    categoryStats: "Items per category",
     confirmDeleteCategory: "This category and all related items will be deleted.",
     confirmDeleteItem: "This item will be deleted.",
     confirmDeleteTitle: "Confirm deletion",
@@ -70,8 +108,20 @@ const copy = {
     demoLogin: "Demo login",
     email: "Email",
     emptyCategory: "This category does not have any items yet.",
+    edit: "Edit",
     invalidLogin: "Email or password is incorrect.",
     itemPhoto: "Item photo",
+    itemTotal: "Items",
+    messageCategoryAdded: "Category added successfully.",
+    messageDeleted: "Deleted successfully.",
+    messageItemAdded: "Item added successfully.",
+    messageItemUpdated: "Item updated successfully.",
+    messageLinkCopied: "Link copied.",
+    messagePasswordReset: "Password updated successfully.",
+    messageQrDownloaded: "QR code downloaded.",
+    messageRestaurantCreated: "Restaurant account created.",
+    messageRestaurantSaved: "Saved successfully.",
+    messageThemeChanged: "Design updated.",
     login: "Log in",
     logoColor: "Logo background color",
     logoPhoto: "Restaurant logo",
@@ -79,6 +129,8 @@ const copy = {
     noDescription: "No description added.",
     noItems: "No items yet.",
     noResults: "No matching items found.",
+    closed: "Closed",
+    openingHours: "Opening hours",
     password: "Password",
     photo: "Photo",
     priceEuro: "Price (€)",
@@ -87,6 +139,11 @@ const copy = {
     searchPlaceholder: "Search menu",
     textColor: "Text color",
     updateMenu: "Update your menu",
+    updateItem: "Update item",
+    visitorStats: "Visitor statistics",
+    viewsMonth: "This month",
+    viewsTotal: "Total",
+    viewsWeek: "This week",
   },
 };
 
@@ -117,7 +174,14 @@ const translations = {
   "İçecekler": { de: "Getränke", en: "Drinks" },
 };
 
-let language = localStorage.getItem("digital-menu-language") || "de";
+function detectLanguage() {
+  const browserLanguage = (navigator.language || navigator.userLanguage || "de").toLowerCase();
+  return browserLanguage.startsWith("en") ? "en" : "de";
+}
+
+const storedLanguage = localStorage.getItem("digital-menu-language");
+const startsOnMenuPage = !location.hash.includes("admin") && !location.hash.includes("platform") && !location.pathname.replace(/\/+$/, "").endsWith("/admin");
+let language = startsOnMenuPage ? detectLanguage() : storedLanguage || detectLanguage();
 if (!SUPPORTED_LANGUAGES.includes(language)) language = "de";
 
 let state = loadState();
@@ -125,6 +189,9 @@ let activeCategory = activeRestaurant().categories[0]?.id || "";
 let isLoggedIn = false;
 let pendingDelete = null;
 let menuOpened = location.hash === "#menu";
+let activeAdminTab = "dashboard";
+let activeMenuItemId = "";
+let editingItemId = "";
 
 const $ = (selector) => document.querySelector(selector);
 
@@ -150,6 +217,12 @@ const elements = {
   categoryTabs: $("#categoryTabs"),
   menuContent: $("#menuContent"),
   searchInput: $("#searchInput"),
+  menuItemModal: $("#menuItemModal"),
+  menuItemDialog: $("#menuItemDialog"),
+  mapFrame: $("#mapFrame"),
+  footerAddressLine1: $("#footerAddressLine1"),
+  footerAddressLine2: $("#footerAddressLine2"),
+  footerOpeningHours: $("#footerOpeningHours"),
   loginPanel: $("#loginPanel"),
   dashboardPanel: $("#dashboardPanel"),
   loginForm: $("#loginForm"),
@@ -158,6 +231,11 @@ const elements = {
   loginMessage: $("#loginMessage"),
   logoutButton: $("#logoutButton"),
   dashboardTitle: $("#dashboardTitle"),
+  adminStatsGrid: $("#adminStatsGrid"),
+  dashboardSummaryGrid: $("#dashboardSummaryGrid"),
+  categoryStatsList: $("#categoryStatsList"),
+  adminMenu: $("#adminMenu"),
+  statusMessage: $("#statusMessage"),
   restaurantForm: $("#restaurantForm"),
   restaurantNameDeInput: $("#restaurantNameDeInput"),
   restaurantNameEnInput: $("#restaurantNameEnInput"),
@@ -177,6 +255,16 @@ const elements = {
   facebookInput: $("#facebookInput"),
   tiktokInput: $("#tiktokInput"),
   wifiInput: $("#wifiInput"),
+  addressLine1Input: $("#addressLine1Input"),
+  addressLine2Input: $("#addressLine2Input"),
+  mapQueryInput: $("#mapQueryInput"),
+  openingHoursEditor: $("#openingHoursEditor"),
+  termsDeInput: $("#termsDeInput"),
+  termsEnInput: $("#termsEnInput"),
+  privacyDeInput: $("#privacyDeInput"),
+  privacyEnInput: $("#privacyEnInput"),
+  imprintDeInput: $("#imprintDeInput"),
+  imprintEnInput: $("#imprintEnInput"),
   categoryForm: $("#categoryForm"),
   categoryNameDeInput: $("#categoryNameDeInput"),
   categoryNameEnInput: $("#categoryNameEnInput"),
@@ -189,6 +277,8 @@ const elements = {
   itemDescriptionEnInput: $("#itemDescriptionEnInput"),
   itemPriceInput: $("#itemPriceInput"),
   itemImageInput: $("#itemImageInput"),
+  itemSubmitButton: $("#itemSubmitButton"),
+  cancelItemEditButton: $("#cancelItemEditButton"),
   itemAdminList: $("#itemAdminList"),
   platformRestaurantForm: $("#platformRestaurantForm"),
   platformRestaurantNameInput: $("#platformRestaurantNameInput"),
@@ -309,11 +399,11 @@ function normalizeRestaurantRecord(record) {
       area: localizeValue(restaurant.area || "Kadıköy şubesi"),
       cover: restaurant.cover || defaultCover,
       logo: restaurant.logo || "",
-      logoColor: restaurant.logoColor || "#ff6b35",
+      logoColor: normalizeBrandColor(restaurant.logoColor, BRAND_COLORS.deepCyan),
       theme: {
-        button: restaurant.theme?.button || restaurant.logoColor || "#ff6b35",
-        background: restaurant.theme?.background || "#f5f7fa",
-        text: restaurant.theme?.text || "#1f2933",
+        button: normalizeBrandColor(restaurant.theme?.button || restaurant.logoColor, BRAND_COLORS.deepCyan),
+        background: normalizeBrandColor(restaurant.theme?.background, BRAND_COLORS.softGrey),
+        text: normalizeBrandColor(restaurant.theme?.text, BRAND_COLORS.darkNavy),
       },
       links: {
         google: restaurant.links?.google || "",
@@ -321,6 +411,17 @@ function normalizeRestaurantRecord(record) {
         facebook: restaurant.links?.facebook || "",
         tiktok: restaurant.links?.tiktok || "",
         wifi: restaurant.links?.wifi || "",
+      },
+      location: {
+        addressLine1: restaurant.location?.addressLine1 || "",
+        addressLine2: restaurant.location?.addressLine2 || "",
+        mapQuery: restaurant.location?.mapQuery || "",
+        openingHours: normalizeOpeningHours(restaurant.location?.openingHours),
+      },
+      legal: {
+        terms: localizeValue(restaurant.legal?.terms || ""),
+        privacy: localizeValue(restaurant.legal?.privacy || ""),
+        imprint: localizeValue(restaurant.legal?.imprint || ""),
       },
     },
     stats: normalizeStats(record.stats),
@@ -355,9 +456,20 @@ function createRestaurantRecord(name, slug, username, password, withSampleItems 
       area: { de: "Neue Filiale", en: "New branch" },
       cover: defaultCover,
       logo: "",
-      logoColor: "#ff6b35",
-      theme: { button: "#ff6b35", background: "#f5f7fa", text: "#1f2933" },
+      logoColor: BRAND_COLORS.deepCyan,
+      theme: { button: BRAND_COLORS.deepCyan, background: BRAND_COLORS.softGrey, text: BRAND_COLORS.darkNavy },
       links: { google: "", instagram: "", facebook: "", tiktok: "", wifi: "" },
+      location: {
+        addressLine1: "",
+        addressLine2: "",
+        mapQuery: "",
+        openingHours: normalizeOpeningHours(),
+      },
+      legal: {
+        terms: { de: "", en: "" },
+        privacy: { de: "", en: "" },
+        imprint: { de: "", en: "" },
+      },
     },
     categories,
     items: [],
@@ -447,6 +559,25 @@ function localizeValue(value) {
   return translations[text] || { de: text, en: text };
 }
 
+function normalizeOpeningHours(value) {
+  const rows = Array.isArray(value) ? value : [];
+  return OPENING_DAYS.map((day) => {
+    const entry = rows.find((row) => row?.day === day.id) || {};
+    return {
+      day: day.id,
+      open: entry.open || "",
+      close: entry.close || "",
+      closed: Boolean(entry.closed),
+    };
+  });
+}
+
+function normalizeBrandColor(value, fallback) {
+  const color = String(value || "").toLowerCase();
+  const oldDefaults = ["#ff6b35", "#d9480f", "#f5f7fa", "#1f2933", "#102027", "#2f9e7e"];
+  return oldDefaults.includes(color) ? fallback : value || fallback;
+}
+
 function asText(value, lang = language) {
   if (value && typeof value === "object") return value[lang] || value.en || value.de || "";
   return localizeValue(value)[lang] || "";
@@ -454,6 +585,17 @@ function asText(value, lang = language) {
 
 function t(key) {
   return copy[language][key] || copy.en[key] || key;
+}
+
+let statusTimer = 0;
+
+function showStatus(messageKey) {
+  window.clearTimeout(statusTimer);
+  elements.statusMessage.textContent = t(messageKey);
+  elements.statusMessage.classList.remove("hidden");
+  statusTimer = window.setTimeout(() => {
+    elements.statusMessage.classList.add("hidden");
+  }, 2600);
 }
 
 function isAdminRoute() {
@@ -481,6 +623,7 @@ function renderAll() {
   renderRestaurant();
   renderQuickActions();
   renderMenu();
+  renderRestaurantFooter();
   renderAdmin();
   renderPlatform();
   showRoute();
@@ -510,15 +653,99 @@ function renderRestaurant() {
   elements.restaurantCuisineEnInput.value = asText(restaurant.cuisine, "en");
   elements.restaurantAreaDeInput.value = asText(restaurant.area, "de");
   elements.restaurantAreaEnInput.value = asText(restaurant.area, "en");
-  elements.logoColorInput.value = restaurant.logoColor || "#ff6b35";
-  elements.buttonColorInput.value = restaurant.theme?.button || "#ff6b35";
-  elements.backgroundColorInput.value = restaurant.theme?.background || "#f5f7fa";
-  elements.textColorInput.value = restaurant.theme?.text || "#1f2933";
+  elements.logoColorInput.value = normalizeBrandColor(restaurant.logoColor, BRAND_COLORS.deepCyan);
+  elements.buttonColorInput.value = normalizeBrandColor(restaurant.theme?.button, BRAND_COLORS.deepCyan);
+  elements.backgroundColorInput.value = normalizeBrandColor(restaurant.theme?.background, BRAND_COLORS.softGrey);
+  elements.textColorInput.value = normalizeBrandColor(restaurant.theme?.text, BRAND_COLORS.darkNavy);
   elements.googleReviewInput.value = restaurant.links?.google || "";
   elements.instagramInput.value = restaurant.links?.instagram || "";
   elements.facebookInput.value = restaurant.links?.facebook || "";
   elements.tiktokInput.value = restaurant.links?.tiktok || "";
   elements.wifiInput.value = restaurant.links?.wifi || "";
+  elements.addressLine1Input.value = restaurant.location?.addressLine1 || "";
+  elements.addressLine2Input.value = restaurant.location?.addressLine2 || "";
+  elements.mapQueryInput.value = restaurant.location?.mapQuery || "";
+  renderOpeningHoursEditor(restaurant.location?.openingHours);
+  elements.termsDeInput.value = asText(restaurant.legal?.terms, "de");
+  elements.termsEnInput.value = asText(restaurant.legal?.terms, "en");
+  elements.privacyDeInput.value = asText(restaurant.legal?.privacy, "de");
+  elements.privacyEnInput.value = asText(restaurant.legal?.privacy, "en");
+  elements.imprintDeInput.value = asText(restaurant.legal?.imprint, "de");
+  elements.imprintEnInput.value = asText(restaurant.legal?.imprint, "en");
+}
+
+function renderOpeningHoursEditor(openingHours) {
+  const rows = normalizeOpeningHours(openingHours);
+  elements.openingHoursEditor.innerHTML = rows
+    .map((row) => {
+      const day = OPENING_DAYS.find((entry) => entry.id === row.day);
+      return `
+        <div class="opening-editor-row" data-opening-day="${row.day}">
+          <strong>${day.de} / ${day.en}</strong>
+          <label>
+            <span>Open</span>
+            <input type="time" data-opening-open value="${escapeHtml(row.open)}" ${row.closed ? "disabled" : ""} />
+          </label>
+          <label>
+            <span>Close</span>
+            <input type="time" data-opening-close value="${escapeHtml(row.close)}" ${row.closed ? "disabled" : ""} />
+          </label>
+          <label class="closed-toggle">
+            <input type="checkbox" data-opening-closed ${row.closed ? "checked" : ""} />
+            <span>${t("closed")}</span>
+          </label>
+        </div>
+      `;
+    })
+    .join("");
+}
+
+function readOpeningHoursEditor() {
+  return Array.from(elements.openingHoursEditor.querySelectorAll("[data-opening-day]")).map((row) => ({
+    day: row.dataset.openingDay,
+    open: row.querySelector("[data-opening-open]").value,
+    close: row.querySelector("[data-opening-close]").value,
+    closed: row.querySelector("[data-opening-closed]").checked,
+  }));
+}
+
+function renderOpeningHoursList(openingHours) {
+  const rows = normalizeOpeningHours(openingHours);
+  const hasAnyValue = rows.some((row) => row.closed || row.open || row.close);
+  if (!hasAnyValue) {
+    return `<p class="opening-hours-empty">${language === "de" ? "Noch keine Öffnungszeiten hinterlegt." : "No opening hours added yet."}</p>`;
+  }
+  return rows
+    .map((row) => {
+      const day = OPENING_DAYS.find((entry) => entry.id === row.day);
+      const dayName = day?.[language] || row.day;
+      const hours = row.closed
+        ? t("closed")
+        : row.open && row.close
+          ? `${row.open} - ${row.close}`
+          : language === "de"
+            ? "Nicht angegeben"
+            : "Not specified";
+      return `
+        <div class="opening-hours-line">
+          <span>${escapeHtml(dayName)}</span>
+          <strong>${escapeHtml(hours)}</strong>
+        </div>
+      `;
+    })
+    .join("");
+}
+
+function renderRestaurantFooter() {
+  const restaurant = activeRestaurant().restaurant;
+  const addressLine1 = restaurant.location?.addressLine1 || asText(restaurant.name);
+  const addressLine2 = restaurant.location?.addressLine2 || asText(restaurant.area);
+  const mapQuery = restaurant.location?.mapQuery || `${addressLine1} ${addressLine2}`;
+  const openingHours = renderOpeningHoursList(restaurant.location?.openingHours);
+  elements.mapFrame.src = `https://www.google.com/maps?q=${encodeURIComponent(mapQuery)}&output=embed`;
+  elements.footerAddressLine1.textContent = addressLine1;
+  elements.footerAddressLine2.textContent = addressLine2;
+  elements.footerOpeningHours.innerHTML = openingHours;
 }
 
 function renderQuickActions() {
@@ -530,12 +757,27 @@ function renderQuickActions() {
   ].join("");
   const actions = [
     `<button class="action-button primary-action menu-action" type="button" data-open-menu>${language === "de" ? "Menü" : "Menu"}</button>`,
-    links.google ? renderActionButton(language === "de" ? "Bewerten Sie uns auf Google" : "Review us on Google", links.google, "google", "review-action") : "",
+    links.google ? renderGoogleReviewButton(links.google) : "",
     socialActions ? `<div class="social-tabs">${socialActions}</div>` : "",
     links.wifi ? renderActionButton("WiFi", links.wifi, "wifi") : "",
   ].join("");
   elements.quickActions.innerHTML = actions;
   elements.menuLayout.classList.toggle("hidden", !menuOpened);
+}
+
+function renderGoogleReviewButton(rawUrl) {
+  const url = normalizeActionUrl(rawUrl);
+  if (!url) return "";
+  const label = language === "de" ? "Bewerten Sie uns auf" : "Review us on";
+  return `
+    <a class="action-button review-action google-review-card" href="${escapeHtml(url)}" target="_blank" rel="noopener" data-action-kind="google" data-action-url="${escapeHtml(url)}" aria-label="${escapeHtml(label)} Google">
+      <span class="google-review-text">${escapeHtml(label)}</span>
+      <span class="google-word" aria-hidden="true">
+        <span class="google-blue">G</span><span class="google-red">o</span><span class="google-yellow">o</span><span class="google-blue">g</span><span class="google-green">l</span><span class="google-red">e</span>
+      </span>
+      <span class="google-stars" aria-hidden="true">★★★★★</span>
+    </a>
+  `;
 }
 
 function renderActionButton(label, rawUrl, kind, extraClass = "") {
@@ -609,10 +851,10 @@ function getInstagramUsername(url) {
 function applyTheme() {
   const theme = activeRestaurant().restaurant.theme || {};
   const root = document.documentElement;
-  root.style.setProperty("--accent", theme.button || "#ff6b35");
-  root.style.setProperty("--accent-dark", theme.button || "#d9480f");
-  root.style.setProperty("--soft", theme.background || "#f5f7fa");
-  root.style.setProperty("--ink", theme.text || "#1f2933");
+  root.style.setProperty("--accent", normalizeBrandColor(theme.button, BRAND_COLORS.deepCyan));
+  root.style.setProperty("--accent-dark", BRAND_COLORS.darkNavy);
+  root.style.setProperty("--soft", normalizeBrandColor(theme.background, BRAND_COLORS.softGrey));
+  root.style.setProperty("--ink", normalizeBrandColor(theme.text, BRAND_COLORS.darkNavy));
 }
 
 function renderBrandMark() {
@@ -620,7 +862,7 @@ function renderBrandMark() {
   const initial = (asText(restaurant.name) || "D").trim().charAt(0) || "D";
   [elements.brandMark, elements.logoPreview].forEach((mark) => {
     mark.textContent = initial;
-    mark.style.backgroundColor = restaurant.logoColor || "#ff6b35";
+    mark.style.backgroundColor = normalizeBrandColor(restaurant.logoColor, BRAND_COLORS.deepCyan);
     mark.style.backgroundImage = restaurant.logo ? `url("${restaurant.logo}")` : "";
     mark.classList.toggle("has-logo", Boolean(restaurant.logo));
   });
@@ -693,7 +935,7 @@ function renderMenuCard(item) {
   const itemName = asText(item.name);
   const photo = item.image ? `<img class="item-photo" src="${item.image}" alt="${escapeHtml(itemName)}" />` : "";
   return `
-    <article class="menu-card${item.image ? " has-photo" : ""}">
+    <article class="menu-card${item.image ? " has-photo" : ""}" data-menu-item="${item.id}" role="button" tabindex="0" aria-label="${escapeHtml(itemName)}">
       <div>
         <h3>${escapeHtml(itemName)}</h3>
         <p>${escapeHtml(asText(item.description) || t("noDescription"))}</p>
@@ -704,11 +946,65 @@ function renderMenuCard(item) {
   `;
 }
 
+function openMenuItemModal(itemId) {
+  const item = activeRestaurant().items.find((entry) => entry.id === itemId);
+  if (!item) return;
+  activeMenuItemId = itemId;
+  const itemName = asText(item.name);
+  const description = asText(item.description) || t("noDescription");
+  const photo = item.image ? `<img class="menu-item-modal-photo" src="${item.image}" alt="${escapeHtml(itemName)}" />` : "";
+  elements.menuItemDialog.innerHTML = `
+    <button class="menu-item-close" type="button" aria-label="Close">×</button>
+    <div class="menu-item-handle" aria-hidden="true"></div>
+    ${photo}
+    <div class="menu-item-modal-body">
+      <div class="menu-item-modal-title">
+        <h2 id="menuItemModalTitle">${escapeHtml(itemName)}</h2>
+        <strong>${escapeHtml(item.price)} €</strong>
+      </div>
+      <p>${escapeHtml(description)}</p>
+    </div>
+  `;
+  elements.menuItemModal.classList.remove("hidden");
+  document.body.classList.add("modal-open");
+}
+
+function closeMenuItemModal() {
+  activeMenuItemId = "";
+  elements.menuItemModal.classList.add("hidden");
+  elements.menuItemDialog.innerHTML = "";
+  document.body.classList.remove("modal-open");
+}
+
+function openLegalModal(kind) {
+  const restaurant = activeRestaurant().restaurant;
+  const titles = {
+    terms: "AGB",
+    privacy: "Datenschutzerklärung",
+    imprint: "Impressum",
+  };
+  const content = asText(restaurant.legal?.[kind]) || (language === "de" ? "Noch kein Text hinterlegt." : "No text added yet.");
+  activeMenuItemId = "";
+  elements.menuItemDialog.innerHTML = `
+    <button class="menu-item-close" type="button" aria-label="Close">×</button>
+    <div class="menu-item-handle" aria-hidden="true"></div>
+    <div class="menu-item-modal-body legal-modal-body">
+      <h2 id="menuItemModalTitle">${titles[kind]}</h2>
+      <p>${escapeHtml(content)}</p>
+    </div>
+  `;
+  elements.menuItemModal.classList.remove("hidden");
+  document.body.classList.add("modal-open");
+}
+
 function renderAdmin() {
   const record = activeRestaurant();
   elements.loginPanel.classList.toggle("hidden", isLoggedIn);
   elements.dashboardPanel.classList.toggle("hidden", !isLoggedIn);
   if (!isLoggedIn) return;
+  renderAdminTabs();
+  renderAdminStats(record);
+  renderItemFormMode();
 
   elements.itemCategoryInput.innerHTML = record.categories
     .map((category) => `<option value="${category.id}">${escapeHtml(asText(category.name, "de"))} / ${escapeHtml(asText(category.name, "en"))}</option>`)
@@ -727,17 +1023,96 @@ function renderAdmin() {
       .join("") || `<div class="empty-state">${t("noItems")}</div>`;
 
   elements.itemAdminList.innerHTML =
-    record.items
-      .map((item) => {
-        const category = record.categories.find((entry) => entry.id === item.categoryId)?.name || { de: "-", en: "-" };
+    record.categories
+      .map((category) => {
+        const items = record.items.filter((item) => item.categoryId === category.id);
+        const rows = items.length
+          ? items
+              .map(
+                (item) => `
+                  <div class="admin-row">
+                    <div><strong>${escapeHtml(asText(item.name, "de"))}</strong><span>${escapeHtml(asText(item.name, "en"))} · ${escapeHtml(item.price)} €</span></div>
+                    <div class="row-actions">
+                      <button type="button" data-edit-item="${item.id}">${t("edit")}</button>
+                      <button type="button" data-delete-item="${item.id}">Delete</button>
+                    </div>
+                  </div>
+                `,
+              )
+              .join("")
+          : `<div class="empty-state compact">${t("emptyCategory")}</div>`;
         return `
-          <div class="admin-row">
-            <div><strong>${escapeHtml(asText(item.name, "de"))}</strong><span>${escapeHtml(asText(item.name, "en"))} · ${escapeHtml(asText(category, "en"))} · ${escapeHtml(item.price)} €</span></div>
-            <button type="button" data-delete-item="${item.id}">Delete</button>
+          <div class="admin-group">
+            <h3>${escapeHtml(asText(category.name))}<span>${items.length}</span></h3>
+            ${rows}
           </div>
         `;
       })
       .join("") || `<div class="empty-state">${t("noItems")}</div>`;
+}
+
+function renderItemFormMode() {
+  const isEditing = Boolean(editingItemId);
+  elements.itemSubmitButton.textContent = isEditing ? t("updateItem") : t("addItem");
+  elements.cancelItemEditButton.classList.toggle("hidden", !isEditing);
+}
+
+function startItemEdit(itemId) {
+  const item = activeRestaurant().items.find((entry) => entry.id === itemId);
+  if (!item) return;
+  editingItemId = itemId;
+  activeAdminTab = "items";
+  elements.itemCategoryInput.value = item.categoryId;
+  elements.itemNameDeInput.value = asText(item.name, "de");
+  elements.itemNameEnInput.value = asText(item.name, "en");
+  elements.itemDescriptionDeInput.value = asText(item.description, "de");
+  elements.itemDescriptionEnInput.value = asText(item.description, "en");
+  elements.itemPriceInput.value = item.price;
+  elements.itemImageInput.value = "";
+  renderItemFormMode();
+  renderAdminTabs();
+  elements.itemForm.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+function resetItemForm() {
+  editingItemId = "";
+  elements.itemForm.reset();
+  renderItemFormMode();
+}
+
+function renderAdminTabs() {
+  document.querySelectorAll("[data-admin-section]").forEach((section) => {
+    section.classList.toggle("hidden", section.dataset.adminSection !== activeAdminTab);
+  });
+  elements.adminMenu.querySelectorAll("[data-admin-tab]").forEach((button) => {
+    button.classList.toggle("active", button.dataset.adminTab === activeAdminTab);
+  });
+}
+
+function renderAdminStats(record) {
+  const now = new Date();
+  const stats = normalizeStats(record.stats);
+  const categoryStats = record.categories.map((category) => ({
+    name: asText(category.name),
+    count: record.items.filter((item) => item.categoryId === category.id).length,
+  }));
+  elements.adminStatsGrid.innerHTML = `
+    <div><strong>${stats.weekly[weekKey(now)] || 0}</strong><span>${t("viewsWeek")}</span></div>
+    <div><strong>${stats.monthly[monthKey(now)] || 0}</strong><span>${t("viewsMonth")}</span></div>
+    <div><strong>${stats.total}</strong><span>${t("viewsTotal")}</span></div>
+  `;
+  elements.dashboardSummaryGrid.innerHTML = `
+    <div><strong>${record.categories.length}</strong><span>${t("categoryCount")}</span></div>
+    <div><strong>${record.items.length}</strong><span>${t("itemTotal")}</span></div>
+  `;
+  elements.categoryStatsList.innerHTML = `
+    <h3>${t("categoryStats")}</h3>
+    <div>
+      ${categoryStats
+        .map((category) => `<span><strong>${escapeHtml(category.name)}</strong><em>${category.count}</em></span>`)
+        .join("")}
+    </div>
+  `;
 }
 
 function renderPlatform() {
@@ -856,6 +1231,38 @@ elements.languageToggle.addEventListener("click", () => {
 
 elements.searchInput.addEventListener("input", renderMenu);
 
+elements.menuContent.addEventListener("click", (event) => {
+  const card = event.target.closest("[data-menu-item]");
+  if (!card) return;
+  if (activeMenuItemId === card.dataset.menuItem) {
+    closeMenuItemModal();
+    return;
+  }
+  openMenuItemModal(card.dataset.menuItem);
+});
+
+elements.menuContent.addEventListener("keydown", (event) => {
+  if (!["Enter", " "].includes(event.key)) return;
+  const card = event.target.closest("[data-menu-item]");
+  if (!card) return;
+  event.preventDefault();
+  openMenuItemModal(card.dataset.menuItem);
+});
+
+elements.menuItemModal.addEventListener("click", (event) => {
+  if (event.target === elements.menuItemModal || event.target.closest(".menu-item-close")) closeMenuItemModal();
+});
+
+document.querySelector("#restaurantFooter").addEventListener("click", (event) => {
+  const legalButton = event.target.closest("[data-legal]");
+  if (!legalButton) return;
+  openLegalModal(legalButton.dataset.legal);
+});
+
+window.addEventListener("keydown", (event) => {
+  if (event.key === "Escape" && !elements.menuItemModal.classList.contains("hidden")) closeMenuItemModal();
+});
+
 elements.quickActions.addEventListener("click", (event) => {
   const menuButton = event.target.closest("[data-open-menu]");
   const actionButton = event.target.closest("[data-action-url]");
@@ -893,6 +1300,23 @@ elements.logoutButton.addEventListener("click", () => {
   renderAdmin();
 });
 
+elements.adminMenu.addEventListener("click", (event) => {
+  const button = event.target.closest("[data-admin-tab]");
+  if (!button) return;
+  activeAdminTab = button.dataset.adminTab;
+  renderAdminTabs();
+});
+
+elements.openingHoursEditor.addEventListener("change", (event) => {
+  const checkbox = event.target.closest("[data-opening-closed]");
+  if (!checkbox) return;
+  const row = checkbox.closest("[data-opening-day]");
+  row.querySelectorAll("[data-opening-open], [data-opening-close]").forEach((input) => {
+    input.disabled = checkbox.checked;
+    if (checkbox.checked) input.value = "";
+  });
+});
+
 elements.restaurantForm.addEventListener("submit", async (event) => {
   event.preventDefault();
   const record = activeRestaurant();
@@ -905,11 +1329,11 @@ elements.restaurantForm.addEventListener("submit", async (event) => {
     area: { de: elements.restaurantAreaDeInput.value.trim(), en: elements.restaurantAreaEnInput.value.trim() },
     cover: cover || record.restaurant.cover,
     logo: logo || record.restaurant.logo,
-    logoColor: elements.logoColorInput.value || record.restaurant.logoColor || "#ff6b35",
+    logoColor: elements.logoColorInput.value || record.restaurant.logoColor || BRAND_COLORS.deepCyan,
     theme: {
-      button: elements.buttonColorInput.value || "#ff6b35",
-      background: elements.backgroundColorInput.value || "#f5f7fa",
-      text: elements.textColorInput.value || "#1f2933",
+      button: elements.buttonColorInput.value || BRAND_COLORS.deepCyan,
+      background: elements.backgroundColorInput.value || BRAND_COLORS.softGrey,
+      text: elements.textColorInput.value || BRAND_COLORS.darkNavy,
     },
     links: {
       google: elements.googleReviewInput.value.trim(),
@@ -918,17 +1342,30 @@ elements.restaurantForm.addEventListener("submit", async (event) => {
       tiktok: elements.tiktokInput.value.trim(),
       wifi: elements.wifiInput.value.trim(),
     },
+    location: {
+      addressLine1: elements.addressLine1Input.value.trim(),
+      addressLine2: elements.addressLine2Input.value.trim(),
+      mapQuery: elements.mapQueryInput.value.trim(),
+      openingHours: readOpeningHoursEditor(),
+    },
+    legal: {
+      terms: { de: elements.termsDeInput.value.trim(), en: elements.termsEnInput.value.trim() },
+      privacy: { de: elements.privacyDeInput.value.trim(), en: elements.privacyEnInput.value.trim() },
+      imprint: { de: elements.imprintDeInput.value.trim(), en: elements.imprintEnInput.value.trim() },
+    },
   };
   record.slug = slugify(elements.restaurantNameEnInput.value.trim() || elements.restaurantNameDeInput.value.trim()) || record.slug;
   elements.coverInput.value = "";
   elements.logoInput.value = "";
   saveState();
   renderAll();
+  showStatus("messageRestaurantSaved");
 });
 
 elements.logoColorInput.addEventListener("input", () => {
   activeRestaurant().restaurant.logoColor = elements.logoColorInput.value;
   renderBrandMark();
+  showStatus("messageThemeChanged");
 });
 
 [elements.buttonColorInput, elements.backgroundColorInput, elements.textColorInput].forEach((input) => {
@@ -939,6 +1376,7 @@ elements.logoColorInput.addEventListener("input", () => {
       text: elements.textColorInput.value,
     };
     applyTheme();
+    showStatus("messageThemeChanged");
   });
 });
 
@@ -953,22 +1391,42 @@ elements.categoryForm.addEventListener("submit", (event) => {
   elements.categoryForm.reset();
   saveState();
   renderAll();
+  activeAdminTab = "categories";
+  renderAdminTabs();
+  showStatus("messageCategoryAdded");
 });
 
 elements.itemForm.addEventListener("submit", async (event) => {
   event.preventDefault();
   const image = await readFileAsDataUrl(elements.itemImageInput.files[0]);
-  activeRestaurant().items.push({
-    id: uid(),
+  const record = activeRestaurant();
+  const payload = {
     categoryId: elements.itemCategoryInput.value,
     name: { de: elements.itemNameDeInput.value.trim(), en: elements.itemNameEnInput.value.trim() },
     description: { de: elements.itemDescriptionDeInput.value.trim(), en: elements.itemDescriptionEnInput.value.trim() },
     price: elements.itemPriceInput.value.trim(),
-    image,
-  });
-  elements.itemForm.reset();
+  };
+  const existingItem = record.items.find((item) => item.id === editingItemId);
+  if (existingItem) {
+    Object.assign(existingItem, payload, { image: image || existingItem.image || "" });
+  } else {
+    record.items.push({
+      id: uid(),
+      ...payload,
+      image,
+    });
+  }
+  const wasEditing = Boolean(existingItem);
+  resetItemForm();
   saveState();
   renderAll();
+  activeAdminTab = "items";
+  renderAdminTabs();
+  showStatus(wasEditing ? "messageItemUpdated" : "messageItemAdded");
+});
+
+elements.cancelItemEditButton.addEventListener("click", () => {
+  resetItemForm();
 });
 
 elements.platformRestaurantNameInput.addEventListener("input", () => {
@@ -990,6 +1448,7 @@ elements.platformRestaurantForm.addEventListener("submit", (event) => {
   delete elements.platformSlugInput.dataset.touched;
   saveState();
   renderAll();
+  showStatus("messageRestaurantCreated");
 });
 
 elements.platformRestaurantList.addEventListener("click", async (event) => {
@@ -1008,12 +1467,14 @@ elements.platformRestaurantList.addEventListener("click", async (event) => {
     record.password = nextPassword;
     saveState();
     renderPlatform();
+    showStatus("messagePasswordReset");
     return;
   }
 
   const qrId = event.target.dataset.downloadQr;
   if (qrId) {
     downloadQrPng(event.target.dataset.qrUrl, `qr-${state.restaurants.find((entry) => entry.id === qrId)?.slug || "restaurant"}.png`);
+    showStatus("messageQrDownloaded");
     return;
   }
 
@@ -1021,6 +1482,7 @@ elements.platformRestaurantList.addEventListener("click", async (event) => {
   if (!link) return;
   await navigator.clipboard.writeText(link);
   event.target.textContent = "Copied";
+  showStatus("messageLinkCopied");
   setTimeout(() => {
     event.target.textContent = "Copy NFC link";
   }, 1200);
@@ -1045,6 +1507,11 @@ elements.categoryAdminList.addEventListener("click", (event) => {
 });
 
 elements.itemAdminList.addEventListener("click", (event) => {
+  const editId = event.target.dataset.editItem;
+  if (editId) {
+    startItemEdit(editId);
+    return;
+  }
   const id = event.target.dataset.deleteItem;
   if (!id) return;
   const item = activeRestaurant().items.find((entry) => entry.id === id);
@@ -1072,11 +1539,16 @@ elements.confirmDeleteButton.addEventListener("click", () => {
   if (pendingDelete.type === "category") {
     record.categories = record.categories.filter((category) => category.id !== pendingDelete.id);
     record.items = record.items.filter((item) => item.categoryId !== pendingDelete.id);
+    if (!record.items.some((item) => item.id === editingItemId)) resetItemForm();
   }
-  if (pendingDelete.type === "item") record.items = record.items.filter((item) => item.id !== pendingDelete.id);
+  if (pendingDelete.type === "item") {
+    record.items = record.items.filter((item) => item.id !== pendingDelete.id);
+    if (editingItemId === pendingDelete.id) resetItemForm();
+  }
   closeDeleteModal();
   saveState();
   renderAll();
+  showStatus("messageDeleted");
 });
 
 window.addEventListener("popstate", renderAll);

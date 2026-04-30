@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Digital Restaurant Menu</title>
+    <link rel="icon" href="assets/synkard-icon.svg" />
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
@@ -43,6 +44,36 @@
 
             <section class="menu-content" id="menuContent" aria-live="polite"></section>
           </div>
+
+          <section class="restaurant-footer-section" id="restaurantFooter">
+            <div class="location-card">
+              <iframe id="mapFrame" title="Google Maps" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+              <div class="location-row">
+                <span class="location-icon" aria-hidden="true">⌖</span>
+                <div>
+                  <strong id="footerAddressLine1"></strong>
+                  <span id="footerAddressLine2"></span>
+                </div>
+              </div>
+              <details class="opening-hours">
+                <summary><span aria-hidden="true">◷</span><strong data-i18n="openingHours">Öffnungszeiten</strong></summary>
+                <div class="opening-hours-list" id="footerOpeningHours"></div>
+              </details>
+            </div>
+
+            <footer class="synkard-footer">
+              <div class="synkard-footer-brand">
+                <img src="assets/synkard-footer-logo.svg" alt="Synkard" />
+                <span>Digital Restaurant Menu</span>
+              </div>
+              <nav aria-label="Legal links">
+                <button type="button" data-legal="terms">AGB</button>
+                <button type="button" data-legal="privacy">Datenschutzerklärung</button>
+                <button type="button" data-legal="imprint">Impressum</button>
+              </nav>
+              <p>© 2026 Synkard</p>
+            </footer>
+          </section>
         </section>
 
         <section class="admin-view hidden" id="adminView">
@@ -75,8 +106,22 @@
               <button class="ghost-button" id="logoutButton" type="button" data-i18n="logout">Log out</button>
             </div>
 
+            <nav class="admin-menu" id="adminMenu" aria-label="Restaurant panel menu">
+              <button type="button" class="active" data-admin-tab="dashboard" data-i18n="dashboard">Dashboard</button>
+              <button type="button" data-admin-tab="restaurant" data-i18n="restaurantInfo">Restaurant information</button>
+              <button type="button" data-admin-tab="categories" data-i18n="addCategory">Add category</button>
+              <button type="button" data-admin-tab="items" data-i18n="addMenuItem">Add menu item</button>
+            </nav>
+
+            <section class="panel admin-panel-section admin-stats-panel" data-admin-section="dashboard">
+              <h2 data-i18n="visitorStats">Visitor statistics</h2>
+              <div class="stats-grid admin-stats-grid" id="adminStatsGrid"></div>
+              <div class="dashboard-summary-grid" id="dashboardSummaryGrid"></div>
+              <div class="category-stats-list" id="categoryStatsList"></div>
+            </section>
+
             <div class="dashboard-grid">
-              <section class="panel">
+              <section class="panel admin-panel-section hidden" data-admin-section="restaurant">
                 <h2 data-i18n="restaurantInfo">Restaurant information</h2>
                 <form id="restaurantForm" class="stacked-form">
                   <div class="language-fields">
@@ -109,20 +154,22 @@
                       <input id="restaurantAreaEnInput" />
                     </label>
                   </div>
-                  <label>
-                    <span data-i18n="coverPhoto">Cover photo</span>
-                    <input id="coverInput" type="file" accept="image/*" />
-                  </label>
-                  <div class="logo-editor">
-                    <div class="brand-mark logo-preview" id="logoPreview">L</div>
-                    <div class="stacked-form">
-                      <label>
-                        <span data-i18n="logoPhoto">Restaurant logo</span>
-                        <input id="logoInput" type="file" accept="image/*" />
-                      </label>
+	                  <label>
+	                    <span data-i18n="coverPhoto">Cover photo</span>
+	                    <small class="upload-hint">Recommended: 1600 x 900 px, JPG/PNG, landscape image for the top hero area.</small>
+	                    <input id="coverInput" type="file" accept="image/*" />
+	                  </label>
+	                  <div class="logo-editor">
+	                    <div class="brand-mark logo-preview" id="logoPreview">L</div>
+	                    <div class="stacked-form">
+	                      <label>
+	                        <span data-i18n="logoPhoto">Restaurant logo</span>
+	                        <small class="upload-hint">Recommended: 512 x 512 px, PNG/JPG, square logo. Transparent PNG works best.</small>
+	                        <input id="logoInput" type="file" accept="image/*" />
+	                      </label>
                       <label>
                         <span data-i18n="logoColor">Logo background color</span>
-                        <input id="logoColorInput" type="color" value="#ff6b35" />
+                        <input id="logoColorInput" type="color" value="#176b85" />
                       </label>
                     </div>
                   </div>
@@ -131,20 +178,20 @@
                     <div class="color-controls">
                       <label>
                         <span data-i18n="buttonColor">Button color</span>
-                        <input id="buttonColorInput" type="color" value="#ff6b35" />
+                        <input id="buttonColorInput" type="color" value="#176b85" />
                       </label>
                       <label>
                         <span data-i18n="backgroundColor">Background color</span>
-                        <input id="backgroundColorInput" type="color" value="#f5f7fa" />
+                        <input id="backgroundColorInput" type="color" value="#eeeeee" />
                       </label>
                       <label>
                         <span data-i18n="textColor">Text color</span>
-                        <input id="textColorInput" type="color" value="#1f2933" />
+                        <input id="textColorInput" type="color" value="#053b50" />
                       </label>
                     </div>
                   </div>
-                  <div class="theme-editor">
-                    <h3>Restaurant links</h3>
+	                  <div class="theme-editor">
+	                    <h3>Restaurant links</h3>
                     <div class="language-fields">
                       <label>
                         Google review URL
@@ -167,14 +214,68 @@
                     </div>
                     <label>
                       WiFi connection URL
-                      <input id="wifiInput" placeholder="https://... or wifi link" />
+	                      <input id="wifiInput" placeholder="https://... or wifi link" />
+	                    </label>
+	                  </div>
+                  <div class="theme-editor">
+                    <h3>Location and footer</h3>
+                    <div class="language-fields">
+                      <label>
+                        Address line 1
+                        <input id="addressLine1Input" placeholder="Zülpicher Straße 29" />
+                      </label>
+                      <label>
+                        Address line 2
+                        <input id="addressLine2Input" placeholder="50674 Köln" />
+                      </label>
+                    </div>
+                    <label>
+                      Google Maps search/address
+                      <input id="mapQueryInput" placeholder="Restaurant name, street, city" />
                     </label>
+                    <div>
+                      <span class="field-title">Öffnungszeiten / Opening hours</span>
+                      <div class="opening-hours-editor" id="openingHoursEditor"></div>
+                    </div>
                   </div>
-                  <button class="primary-button" type="submit" data-i18n="saveInfo">Save information</button>
-                </form>
+                  <div class="theme-editor">
+                    <h3>AGB, Datenschutz, Impressum</h3>
+                    <div class="language-fields">
+                      <label>
+                        AGB (DE)
+                        <textarea id="termsDeInput" rows="5"></textarea>
+                      </label>
+                      <label>
+                        Terms (EN)
+                        <textarea id="termsEnInput" rows="5"></textarea>
+                      </label>
+                    </div>
+                    <div class="language-fields">
+                      <label>
+                        Datenschutzerklärung (DE)
+                        <textarea id="privacyDeInput" rows="5"></textarea>
+                      </label>
+                      <label>
+                        Privacy policy (EN)
+                        <textarea id="privacyEnInput" rows="5"></textarea>
+                      </label>
+                    </div>
+                    <div class="language-fields">
+                      <label>
+                        Impressum (DE)
+                        <textarea id="imprintDeInput" rows="5"></textarea>
+                      </label>
+                      <label>
+                        Imprint (EN)
+                        <textarea id="imprintEnInput" rows="5"></textarea>
+                      </label>
+                    </div>
+                  </div>
+	                  <button class="primary-button" type="submit" data-i18n="saveInfo">Save information</button>
+	                </form>
               </section>
 
-              <section class="panel">
+              <section class="panel admin-panel-section hidden" data-admin-section="categories">
                 <h2 data-i18n="addCategory">Add category</h2>
                 <form id="categoryForm" class="stacked-form">
                   <div class="language-fields">
@@ -186,7 +287,7 @@
                 <div class="admin-list" id="categoryAdminList"></div>
               </section>
 
-              <section class="panel">
+              <section class="panel admin-panel-section hidden" data-admin-section="items">
                 <h2 data-i18n="addMenuItem">Add menu item</h2>
                 <form id="itemForm" class="stacked-form">
                   <label>
@@ -217,15 +318,19 @@
                     <span data-i18n="priceEuro">Price (€)</span>
                     <input id="itemPriceInput" inputmode="decimal" placeholder="12,90" required />
                   </label>
-                  <label>
-                    <span data-i18n="itemPhoto">Item photo</span>
-                    <input id="itemImageInput" type="file" accept="image/*" />
-                  </label>
-                  <button class="primary-button" type="submit" data-i18n="addItem">Add item</button>
+	                  <label>
+	                    <span data-i18n="itemPhoto">Item photo</span>
+	                    <small class="upload-hint">Recommended: 1200 x 900 px, JPG/PNG, horizontal food photo. It will be shown large in the popup.</small>
+	                    <input id="itemImageInput" type="file" accept="image/*" />
+	                  </label>
+                  <div class="form-actions">
+                    <button class="primary-button" id="itemSubmitButton" type="submit" data-i18n="addItem">Add item</button>
+                    <button class="secondary-button hidden" id="cancelItemEditButton" type="button" data-i18n="cancel">Cancel</button>
+                  </div>
                 </form>
               </section>
 
-              <section class="panel wide">
+              <section class="panel wide admin-panel-section hidden" data-admin-section="items">
                 <h2 data-i18n="currentItems">Current items</h2>
                 <div class="admin-list product-list" id="itemAdminList"></div>
               </section>
@@ -275,9 +380,10 @@
           </div>
         </section>
       </main>
-    </div>
+	    </div>
+	    <div class="status-message hidden" id="statusMessage" role="status" aria-live="polite"></div>
 
-    <div class="modal-backdrop hidden" id="confirmModal" role="dialog" aria-modal="true" aria-labelledby="confirmTitle">
+	    <div class="modal-backdrop hidden" id="confirmModal" role="dialog" aria-modal="true" aria-labelledby="confirmTitle">
       <div class="confirm-dialog">
         <h2 id="confirmTitle" data-i18n="confirmDeleteTitle">Delete item?</h2>
         <p id="confirmMessage">This action needs confirmation.</p>
@@ -286,6 +392,10 @@
           <button class="danger-button" id="confirmDeleteButton" type="button" data-i18n="deleteConfirm">Delete</button>
         </div>
       </div>
+    </div>
+
+    <div class="menu-item-backdrop hidden" id="menuItemModal" role="dialog" aria-modal="true" aria-labelledby="menuItemModalTitle">
+      <article class="menu-item-dialog" id="menuItemDialog"></article>
     </div>
 
     <script>
