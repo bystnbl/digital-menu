@@ -508,4 +508,4 @@ Error generating stack: `+u.message+`
   <div class="menu-item-backdrop hidden" id="menuItemModal" role="dialog" aria-modal="true" aria-labelledby="menuItemModalTitle">
     <article class="menu-item-dialog" id="menuItemDialog"></article>
   </div>
-`;function er(){return pm.useEffect(()=>{ar(()=>import("./app-DaP0Jp7-.js"),[]).catch(M=>{document.documentElement.dataset.appError=String(M)})},[]),Sm.createElement("div",{dangerouslySetInnerHTML:{__html:ur}})}const nr=I0.createRoot(document.getElementById("root"));P0.flushSync(()=>{nr.render(Sm.createElement(er,null))});
+`;function er(){return pm.useEffect(()=>{ar(()=>import("./app-C0RnTxly.js"),[]).catch(M=>{document.documentElement.dataset.appError=String(M)})},[]),Sm.createElement("div",{dangerouslySetInnerHTML:{__html:ur}})}const nr=I0.createRoot(document.getElementById("root"));P0.flushSync(()=>{nr.render(Sm.createElement(er,null))});
