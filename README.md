@@ -4,16 +4,31 @@ QR kod veya NFC etiketi ile açılabilecek restoran menüsü için çalışan il
 
 ## Açma
 
-`index.html` dosyasını tarayıcıda açmanız yeterli.
+Proje React + Vite yapısına taşındı. Yerelde çalıştırmak için:
+
+```bash
+npm install
+npm run dev
+```
+
+Geliştirme sunucusu açıldıktan sonra menü sayfası `http://localhost:5173/index.html?r=luna-bistro` adresinden görüntülenir.
+
+Ana giriş ve hesap oluşturma ekranı:
+
+- `http://localhost:5173/index.html`
+- Yeni restoran kullanıcıları buradan hesap oluşturur ve otomatik 1 aylık ücretsiz deneme lisansı alır.
+- Mevcut restoran kullanıcıları da ana giriş ekranından giriş yapar; prototipte kayıtlı restoran hesapları seçim alanından otomatik doldurulabilir.
+- Hesap oluşturulduğunda restoran sayfası otomatik oluşturulur.
+- Program yöneticisi girişi: `admin@synkard.com` / `admin123`
 
 Yönetim paneli doğrudan menü ekranında görünmez. Paneli açmak için:
 
-- Yerel kullanımda: `admin/index.html`
+- Yerel kullanımda: `http://localhost:5173/index.html?r=luna-bistro#admin`
 - Canlı yayında hedef rota: `/admin`
 
 Ana platform yönetim paneli için:
 
-- Yerel kullanımda: `platform/index.html`
+- Yerel kullanımda: `http://localhost:5173/index.html#platform`
 - Canlı yayında hedef rota: `/platform`
 
 ## Demo giriş
@@ -30,15 +45,26 @@ Ana platform yönetim paneli için:
 - Restoran bilgileri, kategori adları, ürün adları ve ürün açıklamaları Almanca/İngilizce ayrı girilebilir.
 - Eski demo içerikleri mümkün olduğu ölçüde otomatik olarak Almanca ve İngilizce gösterilecek şekilde dönüştürülür.
 - Ana platform panelinden farklı restoran hesapları oluşturulabilir.
+- Program yönetim paneli `Dashboard` ve `Kullanıcı Yönetimi` olarak iki sekmeye ayrılmıştır.
+- Dashboard ekranında toplam restoran, aktif lisans, süresi dolmuş lisans, 1 ay kalan lisans, haftalık/aylık/toplam kullanım ve ziyaret sıralaması gösterilir.
+- 1 ay kalan lisans kartına tıklanınca bu lisansa sahip restoranlar listelenir.
 - Her restoran için kullanıcı adı, şifre ve URL adı tanımlanabilir.
+- Her restoran hesabı için lisans başlangıç ve bitiş tarihi tanımlanabilir.
+- Oluşturulmuş restoran hesaplarının lisans başlangıç ve bitiş tarihleri program yöneticisi tarafından sonradan değiştirilebilir.
 - Yeni restoran oluşturulduğunda ayrı bir restoran menü sayfası üretilir.
+- Lisans süresi biten restoranların açılış sayfasında lisans süresinin dolduğunu belirten uyarı gösterilir.
 - Canlı sistem hedefinde restoran sayfaları `domain.com/restoran-adi` formatında açılacak şekilde tasarlanmıştır.
+- Güncel canlı URL hedefi `domain.com/digimenu/restoran-adi` formatıdır.
 - Yerel prototipte restoran sayfaları `index.html?r=restoran-adi` formatıyla önizlenir.
+- Yerel prototipte `/digimenu/restoran-adi` formatı da restoran sayfasını açacak şekilde desteklenir.
 - Veriler bu prototipte tarayıcının yerel hafızasında saklanır.
 - QR/NFC bağlantıları ana platform yönetim panelinde listelenir. QR görseli bu ilk prototipte önizlemedir.
 
 ## Son yapılan düzenlemeler
 
+- Proje React + Vite yapısına taşındı.
+- `package.json`, `package-lock.json`, `src/main.jsx` ve `src/App.jsx` eklendi.
+- Uygulama artık Vite geliştirme sunucusu üzerinden çalıştırılabilir.
 - Menü bölümü tam mobil uyumlu hale getirildi.
 - Yemek kartları her ekranda alt alta listelenecek şekilde düzenlendi.
 - Masaüstünde yemeklerin yan yana dizilmesi kaldırıldı.
@@ -80,6 +106,38 @@ Ana platform yönetim paneli için:
 - Menü listesi yalnızca `Menü` butonuna basılınca açılır.
 - Google, Instagram, Facebook, TikTok ve WiFi butonları sadece restoran panelinde ilgili bağlantı girildiyse görünür.
 - Restoran yönetim paneline Google değerlendirme, Instagram, Facebook, TikTok ve WiFi bağlantı giriş alanları eklendi.
+- Program yönetim panelinde restoran hesabı oluştururken lisans başlangıç ve bitiş tarihi girilebilir hale getirildi.
+- Program yönetim paneli dashboard ve kullanıcı yönetimi olarak iki ayrı menüye ayrıldı.
+- Ana giriş ekranı eklendi: kullanıcılar giriş yapabilir veya hesap oluşturabilir.
+- Hesap oluşturan restoran kullanıcıları için otomatik restoran kaydı ve 1 aylık ücretsiz deneme lisansı oluşturulur.
+- Program yöneticileri aynı giriş ekranından giriş yaparak program yönetim paneline erişir.
+- Restoran yönetim panelindeki eski ayrı giriş kartı kaldırıldı; restoran paneline erişim ana giriş ekranı üzerinden yapılır.
+- Program yönetim panelinin üst barı restoran bilgisi yerine Synkard logosu ve kontrol panel bilgisi gösterecek şekilde ayrıştırıldı.
+- Ana giriş ekranına kayıtlı restoran ve program admin hesaplarını otomatik dolduran geçici hesap seçim alanı eklendi.
+- Restoran yönetim paneline restoran URL adını düzenleme alanı eklendi.
+- Restoran sayfaları için `digimenu/restoran-adi` formatı desteklendi.
+- Dashboard ekranına platform kullanım istatistikleri, lisans özetleri, 1 ay kalan lisans listesi ve restoran ziyaret sıralaması eklendi.
+- Kullanıcı yönetimi ekranında yeni kullanıcı/restoran ekleme formu butonla açılacak şekilde düzenlendi.
+- Restoran satırlarındaki restoran sayfası ve detay aksiyonları küçük simge butonlara dönüştürüldü.
+- Restoran listesi başlığı sadeleştirilerek `Restaurants` olarak güncellendi.
+- Restoran satırlarındaki aksiyon simgeleri restoran adının sağında yan yana duracak şekilde sıkılaştırıldı.
+- Restoran detaylarında aynı anda yalnızca bir restoran detayı açık kalacak şekilde davranış eklendi.
+- Restoran dashboard ekranına lisans başlangıç tarihi, bitiş tarihi ve aktif/süresi doldu bilgisi eklendi.
+- Lisansı biten restoran menü sayfasında lisans süresinin dolduğuna dair uyarı gösterimi eklendi.
+- Program yönetim panelinde restoran detayından lisans başlangıç ve bitiş tarihini güncelleme desteği eklendi.
+- Program yönetim panelindeki ziyaret istatistikleri ayrı bir kartta son 7 gün, son 30 gün ve toplam olarak gösterilecek şekilde düzenlendi.
+- Restoran yönetim panelindeki ziyaret istatistikleri de son 7 gün, son 30 gün ve toplam formatına geçirildi.
+- Ziyaret istatistiklerine `Heute / Today` kartı eklendi.
+- Eski takvim haftası/ayı formatından gelen istatistiklerde `son 30 gün` değerinin `son 7 gün` değerinden küçük görünmesi engellendi.
+- Menü sayfasında harita, adres ve açılış saatleri ayrı çerçeveler halinde düzenlendi; adres ve saat simgeleri daha dengeli SVG ikonlara dönüştürüldü.
+- Adres alanına kopyalama butonu eklendi.
+- Synkard footer alanında `Digitales Menü / Digital Menu` yazısı logonun sağında konumlandırıldı.
+- Ana giriş ekranındaki ikonlar ve oranlar daha sade, standart ve mobil uyumlu hale getirildi.
+- Restoran yönetim panelinde `Menüseite / Menu page` butonu eklendi.
+- Platform ve yönetim ekranlarında kullanılan sabit terimler Almanca/İngilizce çeviri sistemine bağlandı.
+- Program yönetim paneline çıkış butonu eklendi.
+- Ana giriş ekranındaki Google ile devam et butonunun alt açıklama metni kaldırıldı.
+- Restoran ilk açılış ekranında harita, adres ve açılış saatleri görünür bırakıldı; `Menü` butonuyla yemek listesi açıldığında bu bölüm gizlenecek şekilde düzenlendi.
 
 ## Sonraki gerçek ürün adımları
 

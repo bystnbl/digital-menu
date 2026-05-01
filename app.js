@@ -16,6 +16,7 @@ const OPENING_DAYS = [
   { id: "saturday", de: "Samstag", en: "Saturday" },
   { id: "sunday", de: "Sonntag", en: "Sunday" },
 ];
+const PLATFORM_ADMINS = [{ email: "admin@synkard.com", password: "admin123" }];
 
 const defaultCover =
   "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 700'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' x2='1' y1='0' y2='1'%3E%3Cstop stop-color='%23053b50'/%3E%3Cstop offset='0.58' stop-color='%23176b85'/%3E%3Cstop offset='1' stop-color='%2364cac3'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='1200' height='700' fill='url(%23g)'/%3E%3Cpath d='M120 500c170-145 320-145 490 0s320 145 490 0v200H120z' fill='%23eeeeee' fill-opacity='0.18'/%3E%3Ccircle cx='230' cy='170' r='110' fill='%23eeeeee' fill-opacity='0.14'/%3E%3Ccircle cx='930' cy='500' r='170' fill='%2364cac3' fill-opacity='0.16'/%3E%3C/svg%3E";
@@ -26,29 +27,50 @@ const copy = {
     addCategory: "Kategorie hinzufügen",
     addItem: "Gericht hinzufügen",
     addMenuItem: "Menügericht hinzufügen",
+    addUser: "Benutzer hinzufügen",
+    activeLicenses: "Aktive Lizenzen",
     adminPanel: "Restaurant-Panel",
+    accountSelect: "Konto auswählen",
     backgroundColor: "Hintergrundfarbe",
+    backToLogin: "Zur Anmeldung",
     brandColors: "Markenfarben",
     buttonColor: "Button-Farbe",
     cancel: "Abbrechen",
     category: "Kategorie",
+    categoryNameDe: "Kategorie (DE)",
+    categoryNameEn: "Kategorie (EN)",
     categoryCount: "Kategorien",
     categoryStats: "Gerichte pro Kategorie",
     confirmDeleteCategory: "Diese Kategorie und alle zugehörigen Gerichte werden gelöscht.",
     confirmDeleteItem: "Dieses Gericht wird gelöscht.",
     confirmDeleteTitle: "Löschen bestätigen",
     copied: "Kopiert",
+    copyAddress: "Adresse kopieren",
     copyLink: "Link kopieren",
     coverPhoto: "Titelbild",
+    coverHint: "Empfohlen: 1600 x 900 px, JPG/PNG, Querformatbild für den oberen Hero-Bereich.",
     currentItems: "Aktuelle Gerichte",
+    controlPanel: "Kontrollpanel",
+    continueApple: "Mit Apple anmelden",
+    continueGoogle: "Mit Google fortfahren",
+    continueGoogleHint: "Mit Google-Konto anmelden...",
+    continueMicrosoft: "Mit Microsoft fortfahren",
+    createAccount: "Konto erstellen",
+    createRestaurantAccount: "Restaurantkonto erstellen",
     dashboard: "Verwaltung",
     deleteConfirm: "Löschen",
     demoLogin: "Demo-Login",
+    digitalMenu: "Digitales Menü",
     email: "E-Mail",
+    emailRequired: "E-Mail *",
     emptyCategory: "In dieser Kategorie gibt es noch keine Gerichte.",
     edit: "Bearbeiten",
     invalidLogin: "E-Mail oder Passwort ist falsch.",
+    forgotPassword: "Passwort vergessen",
+    itemNameDe: "Gerichtname (DE)",
+    itemNameEn: "Gerichtname (EN)",
     itemPhoto: "Gerichtfoto",
+    itemPhotoHint: "Empfohlen: 1200 x 900 px, JPG/PNG, horizontales Gerichtfoto. Es wird im Popup groß angezeigt.",
     itemTotal: "Gerichte",
     messageCategoryAdded: "Kategorie wurde hinzugefügt.",
     messageDeleted: "Erfolgreich gelöscht.",
@@ -59,58 +81,142 @@ const copy = {
     messageQrDownloaded: "QR-Code wurde heruntergeladen.",
     messageRestaurantCreated: "Restaurantkonto wurde erstellt.",
     messageRestaurantSaved: "Erfolgreich gespeichert.",
+    messageLicenseSaved: "Lizenz wurde aktualisiert.",
     messageThemeChanged: "Design wurde aktualisiert.",
+    license: "Lizenz",
+    licenseExpired: "Die Lizenz für dieses Restaurant ist abgelaufen. Bitte wenden Sie sich an den Anbieter.",
+    licenseInfo: "Lizenzinformationen",
+    licenseStart: "Lizenzbeginn",
+    licenseEnd: "Lizenzende",
+    licenseActive: "Aktiv",
+    licenseEnded: "Abgelaufen",
+    liveDomainFormat: "Live-Domain-Format",
     login: "Einloggen",
     logoColor: "Logo-Hintergrundfarbe",
     logoPhoto: "Restaurantlogo",
+    logoHint: "Empfohlen: 512 x 512 px, PNG/JPG, quadratisches Logo. Transparente PNG-Dateien funktionieren am besten.",
     logout: "Ausloggen",
+    addressLine1: "Adresszeile 1",
+    addressLine2: "Adresszeile 2",
+    facebookUrl: "Facebook-URL",
+    googleMapsSearch: "Google Maps Suche/Adresse",
+    googleReviewUrl: "Google-Bewertungs-URL",
+    instagramUrl: "Instagram-URL",
+    legalSection: "AGB, Datenschutz, Impressum",
+    locationFooter: "Standort und Footer",
+    mapTitle: "Google Maps",
+    menuPage: "Menüseite",
+    newPassword: "Neues Passwort",
     noDescription: "Keine Beschreibung hinzugefügt.",
     noItems: "Noch keine Gerichte vorhanden.",
     noResults: "Keine passenden Gerichte gefunden.",
+    noExpiringLicenses: "Keine Restaurants mit einer Lizenz, die innerhalb eines Monats abläuft.",
+    noRestaurants: "Noch keine Restaurants vorhanden.",
     closed: "Geschlossen",
+    copyNfcLink: "NFC-Link kopieren",
+    details: "Details",
+    downloadQrPng: "QR-PNG herunterladen",
+    expiredLicenses: "Abgelaufene Lizenzen",
+    expiringLicenses: "Lizenzen mit 1 Monat Restlaufzeit",
+    expiringLicensesList: "Lizenzen mit 1 Monat Restlaufzeit",
+    localPreview: "Lokale Vorschau",
+    liveUrl: "Live-URL",
     openingHours: "Öffnungszeiten",
+    openRestaurantAdmin: "Restaurantverwaltung öffnen",
+    openRestaurantPage: "Restaurantseite öffnen",
+    or: "oder",
     password: "Passwort",
+    passwordRequired: "Passwort *",
     photo: "Foto",
+    platform: "Plattform",
     priceEuro: "Preis (€)",
+    publicFormat: "Öffentliches Format: digimenu/restaurant-name",
     restaurantInfo: "Restaurantdaten",
+    restaurantLinks: "Restaurant-Links",
+    restaurantNameLabel: "Restaurantname",
+    restaurantNameRequired: "Restaurantname *",
+    restaurantUrlName: "Restaurant-URL-Name",
+    restaurants: "Restaurants",
+    restaurantVisitStats: "Restaurant-Besuchsstatistiken",
+    rememberMe: "Angemeldet bleiben",
+    resetPassword: "Passwort zurücksetzen",
     saveInfo: "Daten speichern",
+    saveLicense: "Lizenz speichern",
     searchPlaceholder: "Im Menü suchen",
+    selectAccount: "Benutzer auswählen",
+    startTrial: "1 Monat kostenlos starten",
     textColor: "Textfarbe",
+    tiktokUrl: "TikTok-URL",
+    termsDe: "AGB (DE)",
+    termsEn: "Terms (EN)",
+    privacyDe: "Datenschutzerklärung (DE)",
+    privacyEn: "Privacy policy (EN)",
+    imprintDe: "Impressum (DE)",
+    imprintEn: "Imprint (EN)",
+    openingHoursEditor: "Öffnungszeiten / Opening hours",
+    wifiConnectionUrl: "WiFi-Verbindungs-URL",
+    totalRestaurants: "Restaurants gesamt",
+    totalViews: "Aufrufe gesamt",
     updateMenu: "Menü aktualisieren",
     updateItem: "Gericht aktualisieren",
+    urlName: "URL-Name",
+    userManagement: "Benutzerverwaltung",
+    username: "Benutzername",
     visitorStats: "Besucherstatistik",
-    viewsMonth: "Diesen Monat",
+    viewsMonth: "Letzte 30 Tage",
+    viewsToday: "Heute",
     viewsTotal: "Gesamt",
-    viewsWeek: "Diese Woche",
+    viewsWeek: "Letzte 7 Tage",
   },
   en: {
     add: "Add",
     addCategory: "Add category",
     addItem: "Add item",
     addMenuItem: "Add menu item",
+    addUser: "Add user",
+    activeLicenses: "Active licenses",
     adminPanel: "Restaurant panel",
+    accountSelect: "Account",
     backgroundColor: "Background color",
+    backToLogin: "Back to login",
     brandColors: "Brand colors",
     buttonColor: "Button color",
     cancel: "Cancel",
     category: "Category",
+    categoryNameDe: "Category (DE)",
+    categoryNameEn: "Category (EN)",
     categoryCount: "Categories",
     categoryStats: "Items per category",
     confirmDeleteCategory: "This category and all related items will be deleted.",
     confirmDeleteItem: "This item will be deleted.",
     confirmDeleteTitle: "Confirm deletion",
     copied: "Copied",
+    copyAddress: "Copy address",
     copyLink: "Copy link",
     coverPhoto: "Cover photo",
+    coverHint: "Recommended: 1600 x 900 px, JPG/PNG, landscape image for the top hero area.",
     currentItems: "Current items",
+    controlPanel: "Control panel",
+    continueApple: "Sign in with Apple",
+    continueGoogle: "Continue with Google",
+    continueGoogleHint: "Sign in with your Google account...",
+    continueMicrosoft: "Continue with Microsoft",
+    createAccount: "Create account",
+    createRestaurantAccount: "Create restaurant account",
     dashboard: "Dashboard",
     deleteConfirm: "Delete",
     demoLogin: "Demo login",
+    digitalMenu: "Digital Menu",
     email: "Email",
+    emailRequired: "Email *",
     emptyCategory: "This category does not have any items yet.",
     edit: "Edit",
     invalidLogin: "Email or password is incorrect.",
+    forgotPassword: "Forgot password",
+    itemNameDe: "Item name (DE)",
+    itemNameEn: "Item name (EN)",
     itemPhoto: "Item photo",
+    itemPhotoHint: "Recommended: 1200 x 900 px, JPG/PNG, horizontal food photo. It will be shown large in the popup.",
     itemTotal: "Items",
     messageCategoryAdded: "Category added successfully.",
     messageDeleted: "Deleted successfully.",
@@ -121,29 +227,92 @@ const copy = {
     messageQrDownloaded: "QR code downloaded.",
     messageRestaurantCreated: "Restaurant account created.",
     messageRestaurantSaved: "Saved successfully.",
+    messageLicenseSaved: "License updated successfully.",
     messageThemeChanged: "Design updated.",
+    license: "License",
+    licenseExpired: "This restaurant license has expired. Please contact the provider.",
+    licenseInfo: "License information",
+    licenseStart: "License start",
+    licenseEnd: "License end",
+    licenseActive: "Active",
+    licenseEnded: "Expired",
+    liveDomainFormat: "Live domain format",
     login: "Log in",
     logoColor: "Logo background color",
     logoPhoto: "Restaurant logo",
+    logoHint: "Recommended: 512 x 512 px, PNG/JPG, square logo. Transparent PNG works best.",
     logout: "Log out",
+    addressLine1: "Address line 1",
+    addressLine2: "Address line 2",
+    facebookUrl: "Facebook URL",
+    googleMapsSearch: "Google Maps search/address",
+    googleReviewUrl: "Google review URL",
+    instagramUrl: "Instagram URL",
+    legalSection: "Terms, privacy, imprint",
+    locationFooter: "Location and footer",
+    mapTitle: "Google Maps",
+    menuPage: "Menu page",
+    newPassword: "New password",
     noDescription: "No description added.",
     noItems: "No items yet.",
     noResults: "No matching items found.",
+    noExpiringLicenses: "No restaurants have a license expiring within one month.",
+    noRestaurants: "No restaurants yet.",
     closed: "Closed",
+    copyNfcLink: "Copy NFC link",
+    details: "Details",
+    downloadQrPng: "Download QR PNG",
+    expiredLicenses: "Expired licenses",
+    expiringLicenses: "Licenses with 1 month left",
+    expiringLicensesList: "Licenses with 1 month left",
+    localPreview: "Local preview",
+    liveUrl: "Live URL",
     openingHours: "Opening hours",
+    openRestaurantAdmin: "Open restaurant admin",
+    openRestaurantPage: "Open restaurant page",
+    or: "or",
     password: "Password",
+    passwordRequired: "Password *",
     photo: "Photo",
+    platform: "Platform",
     priceEuro: "Price (€)",
+    publicFormat: "Public format: digimenu/restaurant-name",
     restaurantInfo: "Restaurant information",
+    restaurantLinks: "Restaurant links",
+    restaurantNameLabel: "Restaurant name",
+    restaurantNameRequired: "Restaurant name *",
+    restaurantUrlName: "Restaurant URL name",
+    restaurants: "Restaurants",
+    restaurantVisitStats: "Restaurant visit statistics",
+    rememberMe: "Remember me",
+    resetPassword: "Reset password",
     saveInfo: "Save information",
+    saveLicense: "Save license",
     searchPlaceholder: "Search menu",
+    selectAccount: "Select account",
+    startTrial: "Start 1-month free trial",
     textColor: "Text color",
+    tiktokUrl: "TikTok URL",
+    termsDe: "AGB (DE)",
+    termsEn: "Terms (EN)",
+    privacyDe: "Datenschutzerklärung (DE)",
+    privacyEn: "Privacy policy (EN)",
+    imprintDe: "Impressum (DE)",
+    imprintEn: "Imprint (EN)",
+    openingHoursEditor: "Opening hours",
+    wifiConnectionUrl: "WiFi connection URL",
+    totalRestaurants: "Total restaurants",
+    totalViews: "Total views",
     updateMenu: "Update your menu",
     updateItem: "Update item",
+    urlName: "URL name",
+    userManagement: "User management",
+    username: "Username",
     visitorStats: "Visitor statistics",
-    viewsMonth: "This month",
+    viewsMonth: "Last 30 days",
+    viewsToday: "Today",
     viewsTotal: "Total",
-    viewsWeek: "This week",
+    viewsWeek: "Last 7 days",
   },
 };
 
@@ -187,9 +356,11 @@ if (!SUPPORTED_LANGUAGES.includes(language)) language = "de";
 let state = loadState();
 let activeCategory = activeRestaurant().categories[0]?.id || "";
 let isLoggedIn = false;
+let isPlatformLoggedIn = false;
 let pendingDelete = null;
 let menuOpened = location.hash === "#menu";
 let activeAdminTab = "dashboard";
+let activePlatformTab = "dashboard";
 let activeMenuItemId = "";
 let editingItemId = "";
 
@@ -201,6 +372,18 @@ function uid() {
 }
 
 const elements = {
+  authView: $("#authView"),
+  authLoginForm: $("#authLoginForm"),
+  authSignupForm: $("#authSignupForm"),
+  authAccountSelect: $("#authAccountSelect"),
+  authEmailInput: $("#authEmailInput"),
+  authPasswordInput: $("#authPasswordInput"),
+  authMessage: $("#authMessage"),
+  showSignupButton: $("#showSignupButton"),
+  showLoginButton: $("#showLoginButton"),
+  signupRestaurantInput: $("#signupRestaurantInput"),
+  signupEmailInput: $("#signupEmailInput"),
+  signupPasswordInput: $("#signupPasswordInput"),
   menuView: $("#menuView"),
   menuLayout: $("#menuLayout"),
   quickActions: $("#quickActions"),
@@ -216,12 +399,15 @@ const elements = {
   coverImage: $("#coverImage"),
   categoryTabs: $("#categoryTabs"),
   menuContent: $("#menuContent"),
+  licenseNotice: $("#licenseNotice"),
   searchInput: $("#searchInput"),
   menuItemModal: $("#menuItemModal"),
   menuItemDialog: $("#menuItemDialog"),
   mapFrame: $("#mapFrame"),
+  locationCard: $("#locationCard"),
   footerAddressLine1: $("#footerAddressLine1"),
   footerAddressLine2: $("#footerAddressLine2"),
+  copyAddressButton: $("#copyAddressButton"),
   footerOpeningHours: $("#footerOpeningHours"),
   loginPanel: $("#loginPanel"),
   dashboardPanel: $("#dashboardPanel"),
@@ -229,16 +415,19 @@ const elements = {
   emailInput: $("#emailInput"),
   passwordInput: $("#passwordInput"),
   loginMessage: $("#loginMessage"),
+  openMenuPageButton: $("#openMenuPageButton"),
   logoutButton: $("#logoutButton"),
   dashboardTitle: $("#dashboardTitle"),
   adminStatsGrid: $("#adminStatsGrid"),
   dashboardSummaryGrid: $("#dashboardSummaryGrid"),
   categoryStatsList: $("#categoryStatsList"),
+  licenseInfoList: $("#licenseInfoList"),
   adminMenu: $("#adminMenu"),
   statusMessage: $("#statusMessage"),
   restaurantForm: $("#restaurantForm"),
   restaurantNameDeInput: $("#restaurantNameDeInput"),
   restaurantNameEnInput: $("#restaurantNameEnInput"),
+  restaurantSlugInput: $("#restaurantSlugInput"),
   restaurantCuisineDeInput: $("#restaurantCuisineDeInput"),
   restaurantCuisineEnInput: $("#restaurantCuisineEnInput"),
   restaurantAreaDeInput: $("#restaurantAreaDeInput"),
@@ -281,10 +470,20 @@ const elements = {
   cancelItemEditButton: $("#cancelItemEditButton"),
   itemAdminList: $("#itemAdminList"),
   platformRestaurantForm: $("#platformRestaurantForm"),
+  platformMenu: $("#platformMenu"),
+  platformLogoutButton: $("#platformLogoutButton"),
+  platformVisitorStats: $("#platformVisitorStats"),
+  platformDashboardStats: $("#platformDashboardStats"),
+  expiringLicenseList: $("#expiringLicenseList"),
+  platformRankingList: $("#platformRankingList"),
+  showCreateRestaurantButton: $("#showCreateRestaurantButton"),
+  createRestaurantPanel: $("#createRestaurantPanel"),
   platformRestaurantNameInput: $("#platformRestaurantNameInput"),
   platformSlugInput: $("#platformSlugInput"),
   platformUsernameInput: $("#platformUsernameInput"),
   platformPasswordInput: $("#platformPasswordInput"),
+  platformLicenseStartInput: $("#platformLicenseStartInput"),
+  platformLicenseEndInput: $("#platformLicenseEndInput"),
   platformRestaurantList: $("#platformRestaurantList"),
   confirmModal: $("#confirmModal"),
   confirmMessage: $("#confirmMessage"),
@@ -310,14 +509,14 @@ function loadState() {
   }
 
   return normalizePlatformState({
-    platform: { domain: "https://menu.example.com" },
+    platform: { domain: "https://menu.example.com/digimenu" },
     restaurants: [createRestaurantRecord("Luna Bistro", "luna-bistro", "demo@restoran.com", "123456", true)],
   });
 }
 
 function migrateLegacyState(source) {
   return normalizePlatformState({
-    platform: { domain: "https://menu.example.com" },
+    platform: { domain: "https://menu.example.com/digimenu" },
     restaurants: [
       {
         id: uid(),
@@ -335,8 +534,10 @@ function migrateLegacyState(source) {
 function normalizePlatformState(source) {
   const restaurants = (source.restaurants || []).map((record) => normalizeRestaurantRecord(record));
   if (!restaurants.length) restaurants.push(createRestaurantRecord("Luna Bistro", "luna-bistro", "demo@restoran.com", "123456", true));
+  const savedDomain = source.platform?.domain || "";
+  const domain = !savedDomain || savedDomain === "https://menu.example.com" ? "https://menu.example.com/digimenu" : savedDomain;
   return {
-    platform: { domain: source.platform?.domain || "https://menu.example.com" },
+    platform: { domain },
     restaurants,
   };
 }
@@ -354,10 +555,38 @@ function ensureCampaignCategory(categories) {
 function normalizeStats(stats = {}) {
   return {
     total: Number(stats.total || 0),
+    daily: stats.daily || {},
     weekly: stats.weekly || {},
     monthly: stats.monthly || {},
     lastViewedAt: stats.lastViewedAt || "",
   };
+}
+
+function dateKey(date) {
+  return dateInputValue(date);
+}
+
+function sumRecentDays(stats, days) {
+  const normalized = normalizeStats(stats);
+  const today = new Date();
+  let dailyTotal = 0;
+  for (let offset = 0; offset < days; offset += 1) {
+    const date = new Date(today);
+    date.setDate(today.getDate() - offset);
+    dailyTotal += Number(normalized.daily[dateKey(date)] || 0);
+  }
+  const legacyWeek = Number(normalized.weekly[weekKey(today)] || 0);
+  const legacyMonth = Number(normalized.monthly[monthKey(today)] || 0);
+  const value = days <= 7
+    ? Math.max(dailyTotal, legacyWeek)
+    : Math.max(dailyTotal, legacyMonth, legacyWeek);
+  return normalized.total > 0 ? Math.min(value, normalized.total) : value;
+}
+
+function sumToday(stats) {
+  const normalized = normalizeStats(stats);
+  const value = Number(normalized.daily[dateKey(new Date())] || 0);
+  return normalized.total > 0 ? Math.min(value, normalized.total) : value;
 }
 
 function weekKey(date) {
@@ -370,12 +599,63 @@ function monthKey(date) {
   return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}`;
 }
 
+function dateInputValue(date = new Date()) {
+  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
+}
+
+function addYearsToDate(value, years) {
+  const date = value ? new Date(`${value}T00:00:00`) : new Date();
+  date.setFullYear(date.getFullYear() + years);
+  return dateInputValue(date);
+}
+
+function addMonthsToDate(value, months) {
+  const date = value ? new Date(`${value}T00:00:00`) : new Date();
+  date.setMonth(date.getMonth() + months);
+  return dateInputValue(date);
+}
+
+function normalizeLicense(license = {}) {
+  const today = dateInputValue();
+  return {
+    start: license.start || today,
+    end: license.end || addYearsToDate(today, 1),
+  };
+}
+
+function isLicenseExpired(license) {
+  const normalized = normalizeLicense(license);
+  const end = new Date(`${normalized.end}T23:59:59`);
+  return Number.isFinite(end.getTime()) && end < new Date();
+}
+
+function isLicenseExpiringSoon(license) {
+  const normalized = normalizeLicense(license);
+  if (isLicenseExpired(normalized)) return false;
+  const end = new Date(`${normalized.end}T23:59:59`);
+  const limit = new Date();
+  limit.setMonth(limit.getMonth() + 1);
+  return Number.isFinite(end.getTime()) && end <= limit;
+}
+
+function formatDate(value) {
+  if (!value) return "-";
+  const date = new Date(`${value}T00:00:00`);
+  if (!Number.isFinite(date.getTime())) return value;
+  return new Intl.DateTimeFormat(language === "de" ? "de-DE" : "en-GB", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+  }).format(date);
+}
+
 function trackRestaurantView() {
   if (isAdminRoute() || isPlatformRoute()) return;
   const record = activeRestaurant();
   const now = new Date();
   record.stats = normalizeStats(record.stats);
   record.stats.total += 1;
+  record.stats.daily[dateKey(now)] = (record.stats.daily[dateKey(now)] || 0) + 1;
   record.stats.weekly[weekKey(now)] = (record.stats.weekly[weekKey(now)] || 0) + 1;
   record.stats.monthly[monthKey(now)] = (record.stats.monthly[monthKey(now)] || 0) + 1;
   record.stats.lastViewedAt = now.toISOString();
@@ -393,6 +673,7 @@ function normalizeRestaurantRecord(record) {
     slug: slugify(record.slug || restaurant.slug || asText(restaurant.name || "restaurant", "en")) || "restaurant",
     username: record.username || "demo@restoran.com",
     password: record.password || "123456",
+    license: normalizeLicense(record.license),
     restaurant: {
       name: localizeValue(restaurant.name || "Luna Bistro"),
       cuisine: localizeValue(restaurant.cuisine || "Modern Akdeniz mutfağı"),
@@ -450,6 +731,7 @@ function createRestaurantRecord(name, slug, username, password, withSampleItems 
     slug: slugify(slug || name),
     username,
     password,
+    license: normalizeLicense(),
     restaurant: {
       name: { de: name, en: name },
       cuisine: { de: "Restaurantküche", en: "Restaurant cuisine" },
@@ -606,21 +888,35 @@ function isPlatformRoute() {
   return location.pathname.replace(/\/+$/, "").endsWith("/platform") || location.hash === "#platform" || new URLSearchParams(location.search).has("platform");
 }
 
+function isHomeRoute() {
+  const params = new URLSearchParams(location.search);
+  const path = location.pathname.replace(/\/+$/, "");
+  return !params.get("r") && !params.has("admin") && !params.has("platform") && !location.hash && (path.endsWith("/index.html") || path === "" || path === "/");
+}
+
 function showRoute() {
   const platform = isPlatformRoute();
   const admin = isAdminRoute();
-  elements.platformView.classList.toggle("hidden", !platform);
-  elements.adminView.classList.toggle("hidden", !admin || platform);
-  elements.menuView.classList.toggle("hidden", admin || platform);
-  if (platform) renderPlatform();
-  if (admin) renderAdmin();
+  const home = isHomeRoute();
+  const platformLocked = platform && !isPlatformLoggedIn;
+  const adminLocked = admin && !platform && !isLoggedIn;
+  const showAuth = home || platformLocked || adminLocked;
+  document.body.classList.toggle("auth-route", showAuth);
+  elements.authView.classList.toggle("hidden", !showAuth);
+  elements.platformView.classList.toggle("hidden", !platform || platformLocked);
+  elements.adminView.classList.toggle("hidden", !admin || platform || adminLocked);
+  elements.menuView.classList.toggle("hidden", showAuth || admin || platform);
+  if (platform && !platformLocked) renderPlatform();
+  if (admin && !adminLocked) renderAdmin();
 }
 
 function renderAll() {
   document.documentElement.lang = language;
   applyTheme();
   renderStaticText();
+  renderAuthAccountOptions();
   renderRestaurant();
+  renderTopbar();
   renderQuickActions();
   renderMenu();
   renderRestaurantFooter();
@@ -633,20 +929,48 @@ function renderStaticText() {
   document.querySelectorAll("[data-i18n]").forEach((element) => {
     element.textContent = t(element.dataset.i18n);
   });
+  document.querySelectorAll("[data-i18n-placeholder]").forEach((element) => {
+    element.placeholder = t(element.dataset.i18nPlaceholder);
+  });
+  document.querySelectorAll("[data-i18n-title]").forEach((element) => {
+    element.title = t(element.dataset.i18nTitle);
+  });
+  document.querySelectorAll("[data-i18n-aria-label]").forEach((element) => {
+    element.setAttribute("aria-label", t(element.dataset.i18nAriaLabel));
+  });
   elements.searchInput.placeholder = t("searchPlaceholder");
   elements.languageToggle.textContent = language === "de" ? "EN" : "DE";
+}
+
+function renderAuthAccountOptions() {
+  const currentValue = elements.authAccountSelect.value;
+  const restaurantOptions = state.restaurants
+    .map((record) => {
+      const name = asText(record.restaurant.name) || record.slug;
+      return `<option value="restaurant:${record.id}">${escapeHtml(name)} · ${escapeHtml(record.username)}</option>`;
+    })
+    .join("");
+  elements.authAccountSelect.innerHTML = `
+    <option value="">${t("selectAccount")}</option>
+    <option value="platform:admin">Synkard Admin · admin@synkard.com</option>
+    ${restaurantOptions}
+  `;
+  if ([...elements.authAccountSelect.options].some((option) => option.value === currentValue)) {
+    elements.authAccountSelect.value = currentValue;
+  }
 }
 
 function renderRestaurant() {
   const record = activeRestaurant();
   const restaurant = record.restaurant;
+  const license = normalizeLicense(record.license);
+  const expired = isLicenseExpired(license);
   renderBrandMark();
-  elements.restaurantNameTop.textContent = asText(restaurant.name);
-  elements.restaurantAreaTop.textContent = asText(restaurant.area) || "QR & NFC";
   elements.restaurantName.textContent = asText(restaurant.name);
   elements.restaurantCuisine.textContent = asText(restaurant.cuisine);
   elements.coverImage.src = restaurant.cover || defaultCover;
   elements.dashboardTitle.textContent = asText(restaurant.name);
+  elements.restaurantSlugInput.value = record.slug;
   elements.restaurantNameDeInput.value = asText(restaurant.name, "de");
   elements.restaurantNameEnInput.value = asText(restaurant.name, "en");
   elements.restaurantCuisineDeInput.value = asText(restaurant.cuisine, "de");
@@ -672,6 +996,10 @@ function renderRestaurant() {
   elements.privacyEnInput.value = asText(restaurant.legal?.privacy, "en");
   elements.imprintDeInput.value = asText(restaurant.legal?.imprint, "de");
   elements.imprintEnInput.value = asText(restaurant.legal?.imprint, "en");
+  elements.licenseNotice.classList.toggle("hidden", !expired);
+  elements.licenseNotice.innerHTML = expired
+    ? `<strong>${t("licenseEnded")}</strong><span>${t("licenseExpired")}</span>`
+    : "";
 }
 
 function renderOpeningHoursEditor(openingHours) {
@@ -738,6 +1066,7 @@ function renderOpeningHoursList(openingHours) {
 
 function renderRestaurantFooter() {
   const restaurant = activeRestaurant().restaurant;
+  elements.locationCard.classList.toggle("hidden", menuOpened);
   const addressLine1 = restaurant.location?.addressLine1 || asText(restaurant.name);
   const addressLine2 = restaurant.location?.addressLine2 || asText(restaurant.area);
   const mapQuery = restaurant.location?.mapQuery || `${addressLine1} ${addressLine2}`;
@@ -745,6 +1074,7 @@ function renderRestaurantFooter() {
   elements.mapFrame.src = `https://www.google.com/maps?q=${encodeURIComponent(mapQuery)}&output=embed`;
   elements.footerAddressLine1.textContent = addressLine1;
   elements.footerAddressLine2.textContent = addressLine2;
+  elements.copyAddressButton.dataset.address = [addressLine1, addressLine2].filter(Boolean).join(", ");
   elements.footerOpeningHours.innerHTML = openingHours;
 }
 
@@ -849,6 +1179,14 @@ function getInstagramUsername(url) {
 }
 
 function applyTheme() {
+  if (isPlatformRoute() || isHomeRoute()) {
+    const root = document.documentElement;
+    root.style.setProperty("--accent", BRAND_COLORS.deepCyan);
+    root.style.setProperty("--accent-dark", BRAND_COLORS.darkNavy);
+    root.style.setProperty("--soft", BRAND_COLORS.softGrey);
+    root.style.setProperty("--ink", BRAND_COLORS.darkNavy);
+    return;
+  }
   const theme = activeRestaurant().restaurant.theme || {};
   const root = document.documentElement;
   root.style.setProperty("--accent", normalizeBrandColor(theme.button, BRAND_COLORS.deepCyan));
@@ -860,12 +1198,32 @@ function applyTheme() {
 function renderBrandMark() {
   const restaurant = activeRestaurant().restaurant;
   const initial = (asText(restaurant.name) || "D").trim().charAt(0) || "D";
-  [elements.brandMark, elements.logoPreview].forEach((mark) => {
-    mark.textContent = initial;
-    mark.style.backgroundColor = normalizeBrandColor(restaurant.logoColor, BRAND_COLORS.deepCyan);
-    mark.style.backgroundImage = restaurant.logo ? `url("${restaurant.logo}")` : "";
-    mark.classList.toggle("has-logo", Boolean(restaurant.logo));
-  });
+  elements.logoPreview.textContent = initial;
+  elements.logoPreview.style.backgroundColor = normalizeBrandColor(restaurant.logoColor, BRAND_COLORS.deepCyan);
+  elements.logoPreview.style.backgroundImage = restaurant.logo ? `url("${restaurant.logo}")` : "";
+  elements.logoPreview.classList.toggle("has-logo", Boolean(restaurant.logo));
+}
+
+function renderTopbar() {
+  const isPlatform = isPlatformRoute();
+  elements.brandMark.classList.toggle("platform-logo", isPlatform);
+  if (isPlatform) {
+    elements.brandMark.textContent = "";
+    elements.brandMark.style.backgroundColor = "transparent";
+    elements.brandMark.style.backgroundImage = 'url("assets/synkard-icon.svg")';
+    elements.brandMark.classList.add("has-logo");
+    elements.restaurantNameTop.textContent = "Synkard";
+    elements.restaurantAreaTop.textContent = t("controlPanel");
+    return;
+  }
+  const restaurant = activeRestaurant().restaurant;
+  const initial = (asText(restaurant.name) || "D").trim().charAt(0) || "D";
+  elements.brandMark.textContent = initial;
+  elements.brandMark.style.backgroundColor = normalizeBrandColor(restaurant.logoColor, BRAND_COLORS.deepCyan);
+  elements.brandMark.style.backgroundImage = restaurant.logo ? `url("${restaurant.logo}")` : "";
+  elements.brandMark.classList.toggle("has-logo", Boolean(restaurant.logo));
+  elements.restaurantNameTop.textContent = asText(restaurant.name);
+  elements.restaurantAreaTop.textContent = asText(restaurant.area) || "QR & NFC";
 }
 
 function renderMenu() {
@@ -999,7 +1357,7 @@ function openLegalModal(kind) {
 
 function renderAdmin() {
   const record = activeRestaurant();
-  elements.loginPanel.classList.toggle("hidden", isLoggedIn);
+  elements.loginPanel.classList.add("hidden");
   elements.dashboardPanel.classList.toggle("hidden", !isLoggedIn);
   if (!isLoggedIn) return;
   renderAdminTabs();
@@ -1092,74 +1450,162 @@ function renderAdminTabs() {
 function renderAdminStats(record) {
   const now = new Date();
   const stats = normalizeStats(record.stats);
+  const license = normalizeLicense(record.license);
+  const expired = isLicenseExpired(license);
   const categoryStats = record.categories.map((category) => ({
     name: asText(category.name),
     count: record.items.filter((item) => item.categoryId === category.id).length,
   }));
   elements.adminStatsGrid.innerHTML = `
-    <div><strong>${stats.weekly[weekKey(now)] || 0}</strong><span>${t("viewsWeek")}</span></div>
-    <div><strong>${stats.monthly[monthKey(now)] || 0}</strong><span>${t("viewsMonth")}</span></div>
+    <div><strong>${sumToday(stats)}</strong><span>${t("viewsToday")}</span></div>
+    <div><strong>${sumRecentDays(stats, 7)}</strong><span>${t("viewsWeek")}</span></div>
+    <div><strong>${sumRecentDays(stats, 30)}</strong><span>${t("viewsMonth")}</span></div>
     <div><strong>${stats.total}</strong><span>${t("viewsTotal")}</span></div>
   `;
+  elements.dashboardSummaryGrid.innerHTML = "";
   elements.dashboardSummaryGrid.innerHTML = `
     <div><strong>${record.categories.length}</strong><span>${t("categoryCount")}</span></div>
     <div><strong>${record.items.length}</strong><span>${t("itemTotal")}</span></div>
   `;
   elements.categoryStatsList.innerHTML = `
-    <h3>${t("categoryStats")}</h3>
     <div>
       ${categoryStats
         .map((category) => `<span><strong>${escapeHtml(category.name)}</strong><em>${category.count}</em></span>`)
         .join("")}
     </div>
   `;
+  elements.licenseInfoList.innerHTML = `
+    <span><strong>${t("licenseStart")}</strong><em>${escapeHtml(formatDate(license.start))}</em></span>
+    <span><strong>${t("licenseEnd")}</strong><em>${escapeHtml(formatDate(license.end))}</em></span>
+    <span><strong>${t("license")}</strong><em class="${expired ? "danger-text" : ""}">${expired ? t("licenseEnded") : t("licenseActive")}</em></span>
+  `;
 }
 
 function renderPlatform() {
-  const now = new Date();
-  const currentWeek = weekKey(now);
-  const currentMonth = monthKey(now);
+  const today = dateInputValue();
+  if (!elements.platformLicenseStartInput.value) elements.platformLicenseStartInput.value = today;
+  if (!elements.platformLicenseEndInput.value) elements.platformLicenseEndInput.value = addYearsToDate(today, 1);
+  renderPlatformTabs();
+  renderPlatformDashboard();
   elements.platformRestaurantList.innerHTML = state.restaurants
     .map((record) => {
       const localUrl = localMenuUrl(record.slug);
       const publicUrl = publicMenuUrl(record.slug);
       const stats = normalizeStats(record.stats);
+      const license = normalizeLicense(record.license);
+      const expired = isLicenseExpired(license);
       return `
         <article class="platform-row">
           <div class="platform-row-main">
-            <div>
+            <div class="platform-row-title">
               <h3>${escapeHtml(asText(record.restaurant.name, "en"))}</h3>
-              <span>/${escapeHtml(record.slug)}</span>
+              <span>/${escapeHtml(record.slug)} · ${expired ? t("licenseEnded") : t("licenseActive")}</span>
             </div>
             <div class="platform-row-actions">
-              <a class="primary-link" href="${escapeHtml(localUrl)}">Open restaurant page</a>
-              <button class="secondary-button" type="button" data-toggle-details="${record.id}">Details</button>
+              <a class="icon-action" href="${escapeHtml(localUrl)}" aria-label="${escapeHtml(t("openRestaurantPage"))}" title="${escapeHtml(t("openRestaurantPage"))}">↗</a>
+              <button class="icon-action" type="button" data-toggle-details="${record.id}" aria-label="${escapeHtml(t("details"))}" title="${escapeHtml(t("details"))}">ⓘ</button>
             </div>
           </div>
           <div class="platform-details hidden" id="details-${record.id}">
             <div class="stats-grid">
-              <div><strong>${stats.weekly[currentWeek] || 0}</strong><span>This week</span></div>
-              <div><strong>${stats.monthly[currentMonth] || 0}</strong><span>This month</span></div>
-              <div><strong>${stats.total}</strong><span>Total views</span></div>
+              <div><strong>${sumToday(stats)}</strong><span>${t("viewsToday")}</span></div>
+              <div><strong>${sumRecentDays(stats, 7)}</strong><span>${t("viewsWeek")}</span></div>
+              <div><strong>${sumRecentDays(stats, 30)}</strong><span>${t("viewsMonth")}</span></div>
+              <div><strong>${stats.total}</strong><span>${t("totalViews")}</span></div>
+            </div>
+            <div class="license-detail-box ${expired ? "expired" : ""}">
+              <strong>${t("licenseInfo")}</strong>
+              <span>${t("licenseStart")}: ${escapeHtml(formatDate(license.start))}</span>
+              <span>${t("licenseEnd")}: ${escapeHtml(formatDate(license.end))}</span>
+              <em>${expired ? t("licenseEnded") : t("licenseActive")}</em>
             </div>
             <div class="detail-grid">
-              <label>Username <input value="${escapeHtml(record.username)}" readonly /></label>
-              <label>Password <input value="${escapeHtml(record.password)}" readonly /></label>
-              <label>New password <input data-password-input="${record.id}" placeholder="New password" /></label>
-              <button class="secondary-button" type="button" data-reset-password="${record.id}">Reset password</button>
-              <label>Live URL <input value="${escapeHtml(publicUrl)}" readonly /></label>
-              <label>Local preview <input value="${escapeHtml(localUrl)}" readonly /></label>
+              <label>${t("username")} <input value="${escapeHtml(record.username)}" readonly /></label>
+              <label>${t("password")} <input value="${escapeHtml(record.password)}" readonly /></label>
+              <label>${t("newPassword")} <input data-password-input="${record.id}" placeholder="${escapeHtml(t("newPassword"))}" /></label>
+              <button class="secondary-button" type="button" data-reset-password="${record.id}">${t("resetPassword")}</button>
+              <label>${t("licenseStart")} <input data-license-start="${record.id}" type="date" value="${escapeHtml(license.start)}" /></label>
+              <label>${t("licenseEnd")} <input data-license-end="${record.id}" type="date" value="${escapeHtml(license.end)}" /></label>
+              <button class="secondary-button" type="button" data-save-license="${record.id}">${t("saveLicense")}</button>
+              <label>${t("liveUrl")} <input value="${escapeHtml(publicUrl)}" readonly /></label>
+              <label>${t("localPreview")} <input value="${escapeHtml(localUrl)}" readonly /></label>
             </div>
             <div class="platform-actions">
-              <button class="secondary-button" type="button" data-copy-link="${escapeHtml(localUrl)}">Copy NFC link</button>
-              <button class="secondary-button" type="button" data-download-qr="${record.id}" data-qr-url="${escapeHtml(publicUrl)}">Download QR PNG</button>
-              <a class="text-link" href="${escapeHtml(localUrl)}&admin=1">Open restaurant admin</a>
+              <button class="secondary-button" type="button" data-copy-link="${escapeHtml(localUrl)}">${t("copyNfcLink")}</button>
+              <button class="secondary-button" type="button" data-download-qr="${record.id}" data-qr-url="${escapeHtml(publicUrl)}">${t("downloadQrPng")}</button>
+              <a class="text-link" href="${escapeHtml(localUrl)}&admin=1">${t("openRestaurantAdmin")}</a>
             </div>
           </div>
         </article>
       `;
     })
     .join("");
+}
+
+function renderPlatformTabs() {
+  document.querySelectorAll("[data-platform-section]").forEach((section) => {
+    section.classList.toggle("hidden", section.dataset.platformSection !== activePlatformTab);
+  });
+  elements.platformMenu.querySelectorAll("[data-platform-tab]").forEach((button) => {
+    button.classList.toggle("active", button.dataset.platformTab === activePlatformTab);
+  });
+}
+
+function renderPlatformDashboard() {
+  const records = state.restaurants.map((record) => ({
+    ...record,
+    stats: normalizeStats(record.stats),
+    license: normalizeLicense(record.license),
+  }));
+  const activeLicenses = records.filter((record) => !isLicenseExpired(record.license));
+  const expiredLicenses = records.filter((record) => isLicenseExpired(record.license));
+  const expiringLicenses = records.filter((record) => isLicenseExpiringSoon(record.license));
+  const totalToday = records.reduce((sum, record) => sum + sumToday(record.stats), 0);
+  const totalWeek = records.reduce((sum, record) => sum + sumRecentDays(record.stats, 7), 0);
+  const totalMonth = records.reduce((sum, record) => sum + sumRecentDays(record.stats, 30), 0);
+  const totalViews = records.reduce((sum, record) => sum + record.stats.total, 0);
+  const ranking = [...records].sort((a, b) => b.stats.total - a.stats.total);
+
+  elements.platformVisitorStats.innerHTML = `
+    <div><strong>${totalToday}</strong><span>${t("viewsToday")}</span></div>
+    <div><strong>${totalWeek}</strong><span>${t("viewsWeek")}</span></div>
+    <div><strong>${totalMonth}</strong><span>${t("viewsMonth")}</span></div>
+    <div><strong>${totalViews}</strong><span>${t("viewsTotal")}</span></div>
+  `;
+
+  elements.platformDashboardStats.innerHTML = `
+    <div><strong>${records.length}</strong><span>${t("totalRestaurants")}</span></div>
+    <div><strong>${activeLicenses.length}</strong><span>${t("activeLicenses")}</span></div>
+    <div><strong>${expiredLicenses.length}</strong><span>${t("expiredLicenses")}</span></div>
+    <button class="stat-card-button" type="button" data-show-expiring-licenses>
+      <strong>${expiringLicenses.length}</strong><span>${t("expiringLicenses")}</span>
+    </button>
+  `;
+
+  elements.expiringLicenseList.innerHTML = `
+    <h3>${t("expiringLicensesList")}</h3>
+    ${
+      expiringLicenses.length
+        ? expiringLicenses
+            .map((record) => `<span><strong>${escapeHtml(asText(record.restaurant.name))}</strong><em>${escapeHtml(formatDate(record.license.end))}</em></span>`)
+            .join("")
+        : `<p class="hint">${t("noExpiringLicenses")}</p>`
+    }
+  `;
+
+  elements.platformRankingList.innerHTML = ranking.length
+    ? ranking
+        .map(
+          (record, index) => `
+            <div class="ranking-row">
+              <span>${index + 1}</span>
+              <strong>${escapeHtml(asText(record.restaurant.name))}</strong>
+              <em>${record.stats.total}</em>
+            </div>
+          `,
+        )
+        .join("")
+    : `<p class="hint">${t("noRestaurants")}</p>`;
 }
 
 function escapeHtml(value) {
@@ -1218,6 +1664,7 @@ function drawQrLikeCode(text, canvas) {
 }
 
 elements.showMenu.addEventListener("click", () => {
+  if (isPlatformRoute()) return;
   history.pushState(null, "", localMenuUrl(activeRestaurant().slug));
   isLoggedIn = false;
   renderAll();
@@ -1254,6 +1701,15 @@ elements.menuItemModal.addEventListener("click", (event) => {
 });
 
 document.querySelector("#restaurantFooter").addEventListener("click", (event) => {
+  const copyAddressButton = event.target.closest("[data-address]");
+  if (copyAddressButton) {
+    navigator.clipboard.writeText(copyAddressButton.dataset.address);
+    copyAddressButton.classList.add("copied");
+    showStatus("messageLinkCopied");
+    window.setTimeout(() => copyAddressButton.classList.remove("copied"), 1200);
+    return;
+  }
+
   const legalButton = event.target.closest("[data-legal]");
   if (!legalButton) return;
   openLegalModal(legalButton.dataset.legal);
@@ -1269,6 +1725,7 @@ elements.quickActions.addEventListener("click", (event) => {
   if (menuButton) {
     menuOpened = true;
     elements.menuLayout.classList.remove("hidden");
+    renderRestaurantFooter();
     elements.menuLayout.scrollIntoView({ behavior: "smooth", block: "start" });
     window.setTimeout(updateFloatingCategoryTabs, 350);
     return;
@@ -1295,9 +1752,16 @@ elements.loginForm.addEventListener("submit", (event) => {
   elements.loginMessage.textContent = t("invalidLogin");
 });
 
+elements.openMenuPageButton.addEventListener("click", () => {
+  history.pushState(null, "", localMenuUrl(activeRestaurant().slug));
+  isLoggedIn = false;
+  menuOpened = false;
+  renderAll();
+});
+
 elements.logoutButton.addEventListener("click", () => {
   isLoggedIn = false;
-  renderAdmin();
+  renderAll();
 });
 
 elements.adminMenu.addEventListener("click", (event) => {
@@ -1354,10 +1818,16 @@ elements.restaurantForm.addEventListener("submit", async (event) => {
       imprint: { de: elements.imprintDeInput.value.trim(), en: elements.imprintEnInput.value.trim() },
     },
   };
-  record.slug = slugify(elements.restaurantNameEnInput.value.trim() || elements.restaurantNameDeInput.value.trim()) || record.slug;
+  const nextSlug = slugify(elements.restaurantSlugInput.value || elements.restaurantNameEnInput.value || elements.restaurantNameDeInput.value) || record.slug;
+  if (state.restaurants.some((entry) => entry.id !== record.id && entry.slug === nextSlug)) {
+    showStatus("invalidLogin");
+    return;
+  }
+  record.slug = nextSlug;
   elements.coverInput.value = "";
   elements.logoInput.value = "";
   saveState();
+  if (getRequestedSlug() !== record.slug) history.replaceState(null, "", localMenuUrl(record.slug) + "&admin=1");
   renderAll();
   showStatus("messageRestaurantSaved");
 });
@@ -1429,6 +1899,86 @@ elements.cancelItemEditButton.addEventListener("click", () => {
   resetItemForm();
 });
 
+elements.showSignupButton.addEventListener("click", () => {
+  elements.authLoginForm.classList.add("hidden");
+  elements.authSignupForm.classList.remove("hidden");
+  elements.authMessage.textContent = "";
+});
+
+elements.showLoginButton.addEventListener("click", () => {
+  elements.authSignupForm.classList.add("hidden");
+  elements.authLoginForm.classList.remove("hidden");
+  elements.authMessage.textContent = "";
+});
+
+elements.authAccountSelect.addEventListener("change", () => {
+  const value = elements.authAccountSelect.value;
+  if (value === "platform:admin") {
+    elements.authEmailInput.value = PLATFORM_ADMINS[0].email;
+    elements.authPasswordInput.value = PLATFORM_ADMINS[0].password;
+    return;
+  }
+  if (value.startsWith("restaurant:")) {
+    const id = value.split(":")[1];
+    const record = state.restaurants.find((entry) => entry.id === id);
+    if (!record) return;
+    elements.authEmailInput.value = record.username;
+    elements.authPasswordInput.value = record.password;
+  }
+});
+
+elements.authLoginForm.addEventListener("submit", (event) => {
+  event.preventDefault();
+  const email = elements.authEmailInput.value.trim();
+  const password = elements.authPasswordInput.value.trim();
+  const platformAdmin = PLATFORM_ADMINS.find((admin) => admin.email === email && admin.password === password);
+  if (platformAdmin) {
+    isPlatformLoggedIn = true;
+    activePlatformTab = "dashboard";
+    history.pushState(null, "", `${location.pathname}#platform`);
+    renderAll();
+    return;
+  }
+  const record = state.restaurants.find((entry) => entry.username === email && entry.password === password);
+  if (!record) {
+    elements.authMessage.textContent = t("invalidLogin");
+    return;
+  }
+  isLoggedIn = true;
+  activeAdminTab = "dashboard";
+  history.pushState(null, "", `${location.pathname}?r=${encodeURIComponent(record.slug)}&admin=1`);
+  renderAll();
+});
+
+elements.authSignupForm.addEventListener("submit", (event) => {
+  event.preventDefault();
+  const name = elements.signupRestaurantInput.value.trim();
+  const email = elements.signupEmailInput.value.trim();
+  const password = elements.signupPasswordInput.value.trim();
+  const slugBase = slugify(name);
+  let slug = slugBase || `restaurant-${state.restaurants.length + 1}`;
+  let suffix = 2;
+  while (state.restaurants.some((record) => record.slug === slug)) {
+    slug = `${slugBase}-${suffix}`;
+    suffix += 1;
+  }
+  if (state.restaurants.some((record) => record.username === email)) {
+    elements.authMessage.textContent = t("invalidLogin");
+    return;
+  }
+  const today = dateInputValue();
+  const record = createRestaurantRecord(name, slug, email, password);
+  record.license = normalizeLicense({ start: today, end: addMonthsToDate(today, 1) });
+  state.restaurants.push(record);
+  saveState();
+  isLoggedIn = true;
+  activeAdminTab = "restaurant";
+  elements.authSignupForm.reset();
+  history.pushState(null, "", `${location.pathname}?r=${encodeURIComponent(record.slug)}&admin=1`);
+  renderAll();
+  showStatus("messageRestaurantCreated");
+});
+
 elements.platformRestaurantNameInput.addEventListener("input", () => {
   if (!elements.platformSlugInput.dataset.touched) elements.platformSlugInput.value = slugify(elements.platformRestaurantNameInput.value);
 });
@@ -1438,23 +1988,60 @@ elements.platformSlugInput.addEventListener("input", () => {
   elements.platformSlugInput.value = slugify(elements.platformSlugInput.value);
 });
 
+elements.platformMenu.addEventListener("click", (event) => {
+  const button = event.target.closest("[data-platform-tab]");
+  if (!button) return;
+  activePlatformTab = button.dataset.platformTab;
+  renderPlatformTabs();
+});
+
+elements.platformLogoutButton.addEventListener("click", () => {
+  isPlatformLoggedIn = false;
+  activePlatformTab = "dashboard";
+  history.pushState(null, "", `${location.pathname.replace(/\/(admin|platform)\/?$/, "/index.html").replace(/\/index\.html$/, "/index.html")}`);
+  renderAll();
+});
+
+elements.showCreateRestaurantButton.addEventListener("click", () => {
+  elements.createRestaurantPanel.classList.toggle("hidden");
+});
+
 elements.platformRestaurantForm.addEventListener("submit", (event) => {
   event.preventDefault();
   const name = elements.platformRestaurantNameInput.value.trim();
   const slug = slugify(elements.platformSlugInput.value || name);
   if (!name || !slug || state.restaurants.some((record) => record.slug === slug)) return;
-  state.restaurants.push(createRestaurantRecord(name, slug, elements.platformUsernameInput.value.trim(), elements.platformPasswordInput.value.trim()));
+  const record = createRestaurantRecord(name, slug, elements.platformUsernameInput.value.trim(), elements.platformPasswordInput.value.trim());
+  record.license = normalizeLicense({
+    start: elements.platformLicenseStartInput.value,
+    end: elements.platformLicenseEndInput.value,
+  });
+  state.restaurants.push(record);
   elements.platformRestaurantForm.reset();
   delete elements.platformSlugInput.dataset.touched;
+  const today = dateInputValue();
+  elements.platformLicenseStartInput.value = today;
+  elements.platformLicenseEndInput.value = addYearsToDate(today, 1);
+  elements.createRestaurantPanel.classList.add("hidden");
   saveState();
   renderAll();
+  activePlatformTab = "users";
+  renderPlatformTabs();
   showStatus("messageRestaurantCreated");
+});
+
+elements.platformDashboardStats.addEventListener("click", (event) => {
+  if (!event.target.closest("[data-show-expiring-licenses]")) return;
+  elements.expiringLicenseList.classList.toggle("hidden");
 });
 
 elements.platformRestaurantList.addEventListener("click", async (event) => {
   const toggleId = event.target.dataset.toggleDetails;
   if (toggleId) {
-    document.querySelector(`#details-${toggleId}`)?.classList.toggle("hidden");
+    const details = document.querySelector(`#details-${toggleId}`);
+    const shouldOpen = details?.classList.contains("hidden");
+    document.querySelectorAll(".platform-details").forEach((panel) => panel.classList.add("hidden"));
+    if (shouldOpen) details.classList.remove("hidden");
     return;
   }
 
@@ -1471,6 +2058,24 @@ elements.platformRestaurantList.addEventListener("click", async (event) => {
     return;
   }
 
+  const saveLicenseId = event.target.dataset.saveLicense;
+  if (saveLicenseId) {
+    const record = state.restaurants.find((entry) => entry.id === saveLicenseId);
+    const startInput = document.querySelector(`[data-license-start="${saveLicenseId}"]`);
+    const endInput = document.querySelector(`[data-license-end="${saveLicenseId}"]`);
+    if (!record || !startInput?.value || !endInput?.value) return;
+    record.license = normalizeLicense({
+      start: startInput.value,
+      end: endInput.value,
+    });
+    saveState();
+    renderPlatform();
+    const details = document.querySelector(`#details-${saveLicenseId}`);
+    details?.classList.remove("hidden");
+    showStatus("messageLicenseSaved");
+    return;
+  }
+
   const qrId = event.target.dataset.downloadQr;
   if (qrId) {
     downloadQrPng(event.target.dataset.qrUrl, `qr-${state.restaurants.find((entry) => entry.id === qrId)?.slug || "restaurant"}.png`);
@@ -1484,7 +2089,7 @@ elements.platformRestaurantList.addEventListener("click", async (event) => {
   event.target.textContent = "Copied";
   showStatus("messageLinkCopied");
   setTimeout(() => {
-    event.target.textContent = "Copy NFC link";
+    event.target.textContent = t("copyNfcLink");
   }, 1200);
 });
 
