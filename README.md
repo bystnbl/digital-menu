@@ -138,6 +138,8 @@ Ana platform yönetim paneli için:
 - Program yönetim paneline çıkış butonu eklendi.
 - Ana giriş ekranındaki Google ile devam et butonunun alt açıklama metni kaldırıldı.
 - Restoran ilk açılış ekranında harita, adres ve açılış saatleri görünür bırakıldı; `Menü` butonuyla yemek listesi açıldığında bu bölüm gizlenecek şekilde düzenlendi.
+- Restoran ilk açılış ekranındaki Google değerlendirme, sosyal medya ve WiFi alanları daha şık kart görünümlerine dönüştürüldü.
+- `Menü` butonu daha yüksek ve belirgin hale getirildi.
 
 ## Sonraki gerçek ürün adımları
 

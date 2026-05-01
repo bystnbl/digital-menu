@@ -101,6 +101,8 @@ const copy = {
     facebookUrl: "Facebook-URL",
     googleMapsSearch: "Google Maps Suche/Adresse",
     googleReviewUrl: "Google-Bewertungs-URL",
+    googleReviewLead: "Bewerten Sie uns auf Google",
+    googleReviewHint: "Ihre Bewertung hilft anderen Gästen.",
     instagramUrl: "Instagram-URL",
     legalSection: "AGB, Datenschutz, Impressum",
     locationFooter: "Standort und Footer",
@@ -145,6 +147,7 @@ const copy = {
     searchPlaceholder: "Im Menü suchen",
     selectAccount: "Benutzer auswählen",
     startTrial: "1 Monat kostenlos starten",
+    socialFollowTitle: "Folgen Sie uns auf Social Media",
     textColor: "Textfarbe",
     tiktokUrl: "TikTok-URL",
     termsDe: "AGB (DE)",
@@ -155,6 +158,8 @@ const copy = {
     imprintEn: "Imprint (EN)",
     openingHoursEditor: "Öffnungszeiten / Opening hours",
     wifiConnectionUrl: "WiFi-Verbindungs-URL",
+    wifiCtaTitle: "Für kostenloses WiFi hier klicken",
+    wifiButton: "Free WiFi",
     totalRestaurants: "Restaurants gesamt",
     totalViews: "Aufrufe gesamt",
     updateMenu: "Menü aktualisieren",
@@ -247,6 +252,8 @@ const copy = {
     facebookUrl: "Facebook URL",
     googleMapsSearch: "Google Maps search/address",
     googleReviewUrl: "Google review URL",
+    googleReviewLead: "Review us on Google",
+    googleReviewHint: "Your review helps other guests.",
     instagramUrl: "Instagram URL",
     legalSection: "Terms, privacy, imprint",
     locationFooter: "Location and footer",
@@ -291,6 +298,7 @@ const copy = {
     searchPlaceholder: "Search menu",
     selectAccount: "Select account",
     startTrial: "Start 1-month free trial",
+    socialFollowTitle: "Follow us on social media",
     textColor: "Text color",
     tiktokUrl: "TikTok URL",
     termsDe: "AGB (DE)",
@@ -301,6 +309,8 @@ const copy = {
     imprintEn: "Imprint (EN)",
     openingHoursEditor: "Opening hours",
     wifiConnectionUrl: "WiFi connection URL",
+    wifiCtaTitle: "Click here for free WiFi",
+    wifiButton: "Free WiFi",
     totalRestaurants: "Total restaurants",
     totalViews: "Total views",
     updateMenu: "Update your menu",
@@ -1088,8 +1098,8 @@ function renderQuickActions() {
   const actions = [
     `<button class="action-button primary-action menu-action" type="button" data-open-menu>${language === "de" ? "Menü" : "Menu"}</button>`,
     links.google ? renderGoogleReviewButton(links.google) : "",
-    socialActions ? `<div class="social-tabs">${socialActions}</div>` : "",
-    links.wifi ? renderActionButton("WiFi", links.wifi, "wifi") : "",
+    socialActions ? `<section class="quick-card social-follow-card"><h2>${t("socialFollowTitle")}</h2><div class="social-tabs">${socialActions}</div></section>` : "",
+    links.wifi ? renderWifiButton(links.wifi) : "",
   ].join("");
   elements.quickActions.innerHTML = actions;
   elements.menuLayout.classList.toggle("hidden", !menuOpened);
@@ -1098,15 +1108,29 @@ function renderQuickActions() {
 function renderGoogleReviewButton(rawUrl) {
   const url = normalizeActionUrl(rawUrl);
   if (!url) return "";
-  const label = language === "de" ? "Bewerten Sie uns auf" : "Review us on";
   return `
-    <a class="action-button review-action google-review-card" href="${escapeHtml(url)}" target="_blank" rel="noopener" data-action-kind="google" data-action-url="${escapeHtml(url)}" aria-label="${escapeHtml(label)} Google">
-      <span class="google-review-text">${escapeHtml(label)}</span>
-      <span class="google-word" aria-hidden="true">
-        <span class="google-blue">G</span><span class="google-red">o</span><span class="google-yellow">o</span><span class="google-blue">g</span><span class="google-green">l</span><span class="google-red">e</span>
+    <a class="action-button review-action google-review-card" href="${escapeHtml(url)}" target="_blank" rel="noopener" data-action-kind="google" data-action-url="${escapeHtml(url)}" aria-label="${escapeHtml(t("googleReviewLead"))}">
+      <span class="google-review-copy">
+        <strong>${escapeHtml(t("googleReviewLead"))}</strong>
+        <small>${escapeHtml(t("googleReviewHint"))}</small>
       </span>
+      <span class="google-review-mark" aria-hidden="true">G</span>
       <span class="google-stars" aria-hidden="true">★★★★★</span>
     </a>
+  `;
+}
+
+function renderWifiButton(rawUrl) {
+  const url = normalizeActionUrl(rawUrl);
+  if (!url) return "";
+  return `
+    <section class="quick-card wifi-card">
+      <h2>${escapeHtml(t("wifiCtaTitle"))}</h2>
+      <a class="action-button wifi-action" href="${escapeHtml(url)}" target="_blank" rel="noopener" data-action-kind="wifi" data-action-url="${escapeHtml(url)}">
+        <span aria-hidden="true">⌁</span>
+        <strong>${escapeHtml(t("wifiButton"))}</strong>
+      </a>
+    </section>
   `;
 }
 
