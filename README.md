@@ -7,11 +7,21 @@ QR kod veya NFC etiketi ile açılabilecek restoran menüsü için çalışan il
 Proje React + Vite yapısına taşındı. Yerelde çalıştırmak için:
 
 ```bash
+cd "/Users/stnbl/Documents/Codex/2026-04-28/bir-proje-yapmak-istiyorum-proje-restoranlar"
 npm install
 npm run dev
 ```
 
-Geliştirme sunucusu açıldıktan sonra menü sayfası `http://localhost:5173/index.html?r=luna-bistro` adresinden görüntülenir.
+Geliştirme sunucusu açıldıktan sonra menü sayfası Vite portuna göre açılır. GitHub Pages tabanı nedeniyle yerel adres genelde şu formattadır:
+
+- `http://localhost:5173/digital-menu/?r=luna-bistro`
+- Port doluysa Vite `5174` gibi başka bir port verebilir.
+
+Frontend API adresi kök `.env` dosyasından okunur:
+
+```env
+VITE_API_URL=http://localhost:5001
+```
 
 Ana giriş ve hesap oluşturma ekranı:
 
@@ -35,6 +45,70 @@ Ana platform yönetim paneli için:
 
 - E-posta: `demo@restoran.com`
 - Şifre: `123456`
+
+## Backend ve MongoDB Atlas
+
+Projeye MongoDB destekli Express backend eklendi. Backend klasörü:
+
+```text
+backend/
+```
+
+Backend teknolojileri:
+
+- Node.js
+- Express.js
+- MongoDB Atlas
+- Mongoose
+- dotenv
+- cors
+
+Backend kurulumu:
+
+```bash
+cd "/Users/stnbl/Documents/Codex/2026-04-28/bir-proje-yapmak-istiyorum-proje-restoranlar/backend"
+npm install
+cp .env.example .env
+```
+
+`backend/.env` dosyasında MongoDB Atlas bağlantısını gir:
+
+```env
+PORT=5001
+MONGODB_URI=mongodb+srv://USERNAME:PASSWORD@CLUSTER.mongodb.net/digital-menu?retryWrites=true&w=majority
+CLIENT_URL=http://localhost:5173
+```
+
+Backend çalıştırma:
+
+```bash
+npm run dev
+```
+
+API adresi:
+
+```text
+http://localhost:5001
+```
+
+Backend endpointleri:
+
+- `GET /api/products`
+- `GET /api/products/:id`
+- `POST /api/products`
+- `PUT /api/products/:id`
+- `DELETE /api/products/:id`
+- `GET /api/categories`
+- `POST /api/categories`
+
+Restoran bazlı veri için frontend isteklerde `restaurantSlug` kullanır:
+
+```text
+GET /api/products?restaurantSlug=luna-bistro
+GET /api/categories?restaurantSlug=luna-bistro
+```
+
+Frontend mevcut tasarımı bozmadan çalışır. API açıksa kategori ve ürünleri backend'den alır; API kapalıysa mevcut tarayıcı hafızasındaki demo veriyle çalışmaya devam eder.
 
 ## İçerik
 
@@ -140,10 +214,15 @@ Ana platform yönetim paneli için:
 - Restoran ilk açılış ekranında harita, adres ve açılış saatleri görünür bırakıldı; `Menü` butonuyla yemek listesi açıldığında bu bölüm gizlenecek şekilde düzenlendi.
 - Restoran ilk açılış ekranındaki Google değerlendirme, sosyal medya ve WiFi alanları daha şık kart görünümlerine dönüştürüldü.
 - `Menü` butonu daha yüksek ve belirgin hale getirildi.
+- Yerel proje klasörü için hedef ad `digital menü` olarak belirlendi ve README çalıştırma komutu buna göre güncellendi.
+- MongoDB Atlas destekli Express backend eklendi.
+- Backend içinde `Product` ve `Category` Mongoose modelleri oluşturuldu.
+- Ürün CRUD ve kategori oluşturma/listeleme endpointleri eklendi.
+- Frontend ürün ve kategori verisi için `VITE_API_URL` üzerinden API bağlantısı eklendi.
+- Admin panelinde ürün/kategori ekleme, ürün güncelleme ve silme işlemleri API varsa backend'e yazacak, API yoksa eski yerel kayıt davranışıyla çalışacak şekilde düzenlendi.
 
 ## Sonraki gerçek ürün adımları
 
-- Backend ve veritabanı: restoran hesapları, menüler, ürünler, fotoğraflar.
 - Gerçek kimlik doğrulama: restoranlara özel kullanıcı adı ve şifre.
 - Dosya depolama: ürün ve kapak fotoğrafları için bulut depolama.
 - Gerçek QR üretimi ve restoranlara özel `menu.siteadi.com/restoran-adi` adresleri.

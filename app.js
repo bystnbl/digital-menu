@@ -363,6 +363,8 @@ const startsOnMenuPage = !location.hash.includes("admin") && !location.hash.incl
 let language = startsOnMenuPage ? detectLanguage() : storedLanguage || detectLanguage();
 if (!SUPPORTED_LANGUAGES.includes(language)) language = "de";
 
+const API_URL = (import.meta.env?.VITE_API_URL || "").replace(/\/$/, "");
+
 let state = loadState();
 let activeCategory = activeRestaurant().categories[0]?.id || "";
 let isLoggedIn = false;
@@ -373,6 +375,8 @@ let activeAdminTab = "dashboard";
 let activePlatformTab = "dashboard";
 let activeMenuItemId = "";
 let editingItemId = "";
+let apiLastSyncedSlug = "";
+let apiSyncPromise = null;
 
 const $ = (selector) => document.querySelector(selector);
 
@@ -822,6 +826,128 @@ function saveState() {
   }
 }
 
+function isMongoObjectId(value) {
+  return /^[a-f\d]{24}$/i.test(String(value || ""));
+}
+
+function apiUrl(path, params = {}) {
+  const url = new URL(`${API_URL}${path}`);
+  Object.entries(params).forEach(([key, value]) => {
+    if (value !== undefined && value !== null && value !== "") url.searchParams.set(key, value);
+  });
+  return url.toString();
+}
+
+async function apiRequest(path, options = {}) {
+  if (!API_URL) return null;
+  const response = await fetch(apiUrl(path, options.params), {
+    method: options.method || "GET",
+    headers: { "Content-Type": "application/json" },
+    body: options.body ? JSON.stringify(options.body) : undefined,
+  });
+  if (!response.ok) {
+    const details = await response.json().catch(() => ({}));
+    throw new Error(details.message || `API request failed: ${response.status}`);
+  }
+  return response.json();
+}
+
+function normalizeApiCategory(category) {
+  return {
+    id: category.id || category._id || uid(),
+    name: localizeValue(category.name || "Category"),
+    system: category.system || "",
+  };
+}
+
+function normalizeApiProduct(product) {
+  return {
+    id: product.id || product._id || uid(),
+    categoryId: product.categoryId,
+    name: localizeValue(product.name || "Item"),
+    description: localizeValue(product.description || ""),
+    price: product.price || "",
+    image: product.image || "",
+  };
+}
+
+async function syncActiveRestaurantFromApi(force = false) {
+  if (!API_URL || isPlatformRoute()) return;
+  const record = activeRestaurant();
+  const slug = record.slug;
+  if (!force && apiLastSyncedSlug === slug) return;
+  if (apiSyncPromise) return apiSyncPromise;
+
+  apiLastSyncedSlug = slug;
+  apiSyncPromise = Promise.all([
+    apiRequest("/api/categories", { params: { restaurantSlug: slug } }),
+    apiRequest("/api/products", { params: { restaurantSlug: slug } }),
+  ])
+    .then(([categories = [], products = []]) => {
+      if (!categories.length && !products.length) return;
+      if (categories.length) record.categories = ensureCampaignCategory(categories.map(normalizeApiCategory));
+      record.items = products.map(normalizeApiProduct);
+      if (!record.categories.some((category) => category.id === activeCategory)) activeCategory = record.categories[0]?.id || "";
+      saveState();
+      renderAll();
+    })
+    .catch((error) => {
+      console.warn("API sync skipped:", error.message);
+    })
+    .finally(() => {
+      apiSyncPromise = null;
+    });
+
+  return apiSyncPromise;
+}
+
+function scheduleApiSync() {
+  if (!API_URL || isPlatformRoute()) return;
+  window.setTimeout(() => syncActiveRestaurantFromApi(), 0);
+}
+
+async function createCategoryOnApi(category, record) {
+  const created = await apiRequest("/api/categories", {
+    method: "POST",
+    body: {
+      restaurantSlug: record.slug,
+      name: category.name,
+      system: category.system || "",
+      sortOrder: record.categories.length,
+    },
+  });
+  return normalizeApiCategory(created);
+}
+
+async function saveProductOnApi(payload, image, existingItem, record) {
+  const body = {
+    restaurantSlug: record.slug,
+    categoryId: payload.categoryId,
+    name: payload.name,
+    description: payload.description,
+    price: payload.price,
+    image: image || existingItem?.image || "",
+  };
+  const canUpdate = existingItem && isMongoObjectId(existingItem.id);
+  const saved = await apiRequest(canUpdate ? `/api/products/${existingItem.id}` : "/api/products", {
+    method: canUpdate ? "PUT" : "POST",
+    body,
+  });
+  return normalizeApiProduct(saved);
+}
+
+async function deleteProductOnApi(itemId) {
+  if (!isMongoObjectId(itemId)) return;
+  await apiRequest(`/api/products/${itemId}`, { method: "DELETE" });
+}
+
+async function deleteCategoryOnApi(categoryId, record) {
+  if (!isMongoObjectId(categoryId)) return;
+  const products = record.items.filter((item) => item.categoryId === categoryId && isMongoObjectId(item.id));
+  await Promise.all(products.map((item) => deleteProductOnApi(item.id)));
+  await apiRequest(`/api/categories/${categoryId}`, { method: "DELETE" });
+}
+
 function activeRestaurant() {
   const slug = getRequestedSlug();
   return state.restaurants.find((record) => record.slug === slug) || state.restaurants[0];
@@ -933,6 +1059,7 @@ function renderAll() {
   renderAdmin();
   renderPlatform();
   showRoute();
+  scheduleApiSync();
 }
 
 function renderStaticText() {
@@ -1874,14 +2001,21 @@ elements.logoColorInput.addEventListener("input", () => {
   });
 });
 
-elements.categoryForm.addEventListener("submit", (event) => {
+elements.categoryForm.addEventListener("submit", async (event) => {
   event.preventDefault();
   const de = elements.categoryNameDeInput.value.trim();
   const en = elements.categoryNameEnInput.value.trim();
   if (!de || !en) return;
   const category = { id: uid(), name: { de, en } };
-  activeRestaurant().categories.push(category);
-  activeCategory = category.id;
+  const record = activeRestaurant();
+  let nextCategory = category;
+  try {
+    nextCategory = (await createCategoryOnApi(category, record)) || category;
+  } catch (error) {
+    console.warn("Category was saved locally:", error.message);
+  }
+  record.categories.push(nextCategory);
+  activeCategory = nextCategory.id;
   elements.categoryForm.reset();
   saveState();
   renderAll();
@@ -1901,10 +2035,16 @@ elements.itemForm.addEventListener("submit", async (event) => {
     price: elements.itemPriceInput.value.trim(),
   };
   const existingItem = record.items.find((item) => item.id === editingItemId);
+  let savedItem = null;
+  try {
+    savedItem = await saveProductOnApi(payload, image, existingItem, record);
+  } catch (error) {
+    console.warn("Menu item was saved locally:", error.message);
+  }
   if (existingItem) {
-    Object.assign(existingItem, payload, { image: image || existingItem.image || "" });
+    Object.assign(existingItem, savedItem || payload, { image: savedItem?.image || image || existingItem.image || "" });
   } else {
-    record.items.push({
+    record.items.push(savedItem || {
       id: uid(),
       ...payload,
       image,
@@ -2162,15 +2302,25 @@ elements.cancelDeleteButton.addEventListener("click", closeDeleteModal);
 elements.confirmModal.addEventListener("click", (event) => {
   if (event.target === elements.confirmModal) closeDeleteModal();
 });
-elements.confirmDeleteButton.addEventListener("click", () => {
+elements.confirmDeleteButton.addEventListener("click", async () => {
   const record = activeRestaurant();
   if (!pendingDelete) return;
   if (pendingDelete.type === "category") {
+    try {
+      await deleteCategoryOnApi(pendingDelete.id, record);
+    } catch (error) {
+      console.warn("Category was deleted locally:", error.message);
+    }
     record.categories = record.categories.filter((category) => category.id !== pendingDelete.id);
     record.items = record.items.filter((item) => item.categoryId !== pendingDelete.id);
     if (!record.items.some((item) => item.id === editingItemId)) resetItemForm();
   }
   if (pendingDelete.type === "item") {
+    try {
+      await deleteProductOnApi(pendingDelete.id);
+    } catch (error) {
+      console.warn("Menu item was deleted locally:", error.message);
+    }
     record.items = record.items.filter((item) => item.id !== pendingDelete.id);
     if (editingItemId === pendingDelete.id) resetItemForm();
   }
