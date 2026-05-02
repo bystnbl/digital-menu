@@ -4,6 +4,8 @@ import express from "express";
 import { connectDatabase } from "./config/db.js";
 import categoryRoutes from "./routes/categoryRoutes.js";
 import productRoutes from "./routes/productRoutes.js";
+import restaurantRoutes from "./routes/restaurantRoutes.js";
+import visitRoutes from "./routes/visitRoutes.js";
 
 dotenv.config();
 
@@ -23,6 +25,8 @@ app.get("/api/health", (_req, res) => {
 
 app.use("/api/products", productRoutes);
 app.use("/api/categories", categoryRoutes);
+app.use("/api/restaurants", restaurantRoutes);
+app.use("/api/visits", visitRoutes);
 
 app.use((req, res) => {
   res.status(404).json({ message: `Route not found: ${req.method} ${req.originalUrl}` });

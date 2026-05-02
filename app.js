@@ -43,6 +43,7 @@ const copy = {
     categoryStats: "Gerichte pro Kategorie",
     confirmDeleteCategory: "Diese Kategorie und alle zugehörigen Gerichte werden gelöscht.",
     confirmDeleteItem: "Dieses Gericht wird gelöscht.",
+    confirmDeleteRestaurant: "Dieses Restaurantkonto und alle zugehörigen Kategorien und Gerichte werden gelöscht.",
     confirmDeleteTitle: "Löschen bestätigen",
     copied: "Kopiert",
     copyAddress: "Adresse kopieren",
@@ -80,6 +81,7 @@ const copy = {
     messagePasswordReset: "Passwort wurde aktualisiert.",
     messageQrDownloaded: "QR-Code wurde heruntergeladen.",
     messageRestaurantCreated: "Restaurantkonto wurde erstellt.",
+    messageRestaurantDeleted: "Restaurantkonto wurde gelöscht.",
     messageRestaurantSaved: "Erfolgreich gespeichert.",
     messageLicenseSaved: "Lizenz wurde aktualisiert.",
     messageThemeChanged: "Design wurde aktualisiert.",
@@ -194,6 +196,7 @@ const copy = {
     categoryStats: "Items per category",
     confirmDeleteCategory: "This category and all related items will be deleted.",
     confirmDeleteItem: "This item will be deleted.",
+    confirmDeleteRestaurant: "This restaurant account and all related categories and items will be deleted.",
     confirmDeleteTitle: "Confirm deletion",
     copied: "Copied",
     copyAddress: "Copy address",
@@ -231,6 +234,7 @@ const copy = {
     messagePasswordReset: "Password updated successfully.",
     messageQrDownloaded: "QR code downloaded.",
     messageRestaurantCreated: "Restaurant account created.",
+    messageRestaurantDeleted: "Restaurant account deleted.",
     messageRestaurantSaved: "Saved successfully.",
     messageLicenseSaved: "License updated successfully.",
     messageThemeChanged: "Design updated.",
@@ -376,6 +380,7 @@ let activePlatformTab = "dashboard";
 let activeMenuItemId = "";
 let editingItemId = "";
 let apiLastSyncedSlug = "";
+let apiRestaurantsSynced = false;
 let apiSyncPromise = null;
 
 const $ = (selector) => document.querySelector(selector);
@@ -567,8 +572,12 @@ function ensureCampaignCategory(categories) {
 }
 
 function normalizeStats(stats = {}) {
+  stats = stats || {};
   return {
     total: Number(stats.total || 0),
+    today: Number(stats.today || 0),
+    last7: Number(stats.last7 || 0),
+    last30: Number(stats.last30 || 0),
     daily: stats.daily || {},
     weekly: stats.weekly || {},
     monthly: stats.monthly || {},
@@ -582,6 +591,8 @@ function dateKey(date) {
 
 function sumRecentDays(stats, days) {
   const normalized = normalizeStats(stats);
+  if (days <= 7 && normalized.last7) return normalized.last7;
+  if (days <= 30 && normalized.last30) return normalized.last30;
   const today = new Date();
   let dailyTotal = 0;
   for (let offset = 0; offset < days; offset += 1) {
@@ -599,6 +610,7 @@ function sumRecentDays(stats, days) {
 
 function sumToday(stats) {
   const normalized = normalizeStats(stats);
+  if (normalized.today) return normalized.today;
   const value = Number(normalized.daily[dateKey(new Date())] || 0);
   return normalized.total > 0 ? Math.min(value, normalized.total) : value;
 }
@@ -666,6 +678,10 @@ function formatDate(value) {
 function trackRestaurantView() {
   if (isAdminRoute() || isPlatformRoute()) return;
   const record = activeRestaurant();
+  if (API_URL && isMongoObjectId(record.id)) {
+    recordVisitOnApi(record).catch((error) => console.warn("Visit was saved locally:", error.message));
+    return;
+  }
   const now = new Date();
   record.stats = normalizeStats(record.stats);
   record.stats.total += 1;
@@ -814,6 +830,11 @@ function addSampleItems(record) {
 }
 
 function saveState() {
+  if (API_URL) {
+    localStorage.removeItem(STORAGE_KEY);
+    LEGACY_KEYS.forEach((key) => localStorage.removeItem(key));
+    return;
+  }
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
   } catch (error) {
@@ -871,6 +892,48 @@ function normalizeApiProduct(product) {
   };
 }
 
+function normalizeApiRestaurant(restaurant) {
+  return normalizeRestaurantRecord({
+    ...restaurant,
+    id: restaurant.id || restaurant._id || uid(),
+    categories: [],
+    items: [],
+  });
+}
+
+function applyRestaurantStatsSummaries(summaries = []) {
+  summaries.forEach((entry) => {
+    const record = state.restaurants.find((restaurant) => restaurant.slug === entry.restaurantSlug || restaurant.id === entry.restaurantId);
+    if (record) record.stats = normalizeStats(entry.stats);
+  });
+}
+
+function restaurantApiPayload(record) {
+  return {
+    slug: record.slug,
+    username: record.username,
+    password: record.password,
+    license: normalizeLicense(record.license),
+    restaurant: record.restaurant,
+    stats: normalizeStats(record.stats),
+  };
+}
+
+async function syncRestaurantsFromApi(force = false) {
+  if (!API_URL) return;
+  if (!force && apiRestaurantsSynced) return;
+  const [restaurants, visitSummary] = await Promise.all([
+    apiRequest("/api/restaurants"),
+    apiRequest("/api/visits/summary").catch(() => null),
+  ]);
+  if (!restaurants?.length) return;
+  state.restaurants = restaurants.map(normalizeApiRestaurant);
+  applyRestaurantStatsSummaries(visitSummary?.perRestaurant || []);
+  apiRestaurantsSynced = true;
+  saveState();
+  renderAll();
+}
+
 async function syncActiveRestaurantFromApi(force = false) {
   if (!API_URL || isPlatformRoute()) return;
   const record = activeRestaurant();
@@ -902,8 +965,15 @@ async function syncActiveRestaurantFromApi(force = false) {
 }
 
 function scheduleApiSync() {
-  if (!API_URL || isPlatformRoute()) return;
-  window.setTimeout(() => syncActiveRestaurantFromApi(), 0);
+  if (!API_URL) return;
+  window.setTimeout(async () => {
+    try {
+      await syncRestaurantsFromApi();
+      await syncActiveRestaurantFromApi();
+    } catch (error) {
+      console.warn("API sync skipped:", error.message);
+    }
+  }, 0);
 }
 
 async function createCategoryOnApi(category, record) {
@@ -917,6 +987,37 @@ async function createCategoryOnApi(category, record) {
     },
   });
   return normalizeApiCategory(created);
+}
+
+async function createRestaurantOnApi(record) {
+  const created = await apiRequest("/api/restaurants", {
+    method: "POST",
+    body: restaurantApiPayload(record),
+  });
+  return normalizeApiRestaurant(created);
+}
+
+async function saveRestaurantOnApi(record) {
+  if (!isMongoObjectId(record.id)) return record;
+  const saved = await apiRequest(`/api/restaurants/${record.id}`, {
+    method: "PUT",
+    body: restaurantApiPayload(record),
+  });
+  return normalizeApiRestaurant(saved);
+}
+
+async function deleteRestaurantOnApi(record) {
+  if (!isMongoObjectId(record.id)) return;
+  await apiRequest(`/api/restaurants/${record.id}`, { method: "DELETE" });
+}
+
+async function recordVisitOnApi(record) {
+  const result = await apiRequest("/api/visits", {
+    method: "POST",
+    body: { restaurantSlug: record.slug },
+  });
+  record.stats = normalizeStats(result?.stats);
+  renderAll();
 }
 
 async function saveProductOnApi(payload, image, existingItem, record) {
@@ -1655,6 +1756,7 @@ function renderPlatform() {
             <div class="platform-row-actions">
               <a class="icon-action" href="${escapeHtml(localUrl)}" aria-label="${escapeHtml(t("openRestaurantPage"))}" title="${escapeHtml(t("openRestaurantPage"))}">↗</a>
               <button class="icon-action" type="button" data-toggle-details="${record.id}" aria-label="${escapeHtml(t("details"))}" title="${escapeHtml(t("details"))}">ⓘ</button>
+              <button class="icon-action danger-action" type="button" data-delete-restaurant="${record.id}" aria-label="${escapeHtml(t("deleteConfirm"))}" title="${escapeHtml(t("deleteConfirm"))}">×</button>
             </div>
           </div>
           <div class="platform-details hidden" id="details-${record.id}">
@@ -1975,6 +2077,13 @@ elements.restaurantForm.addEventListener("submit", async (event) => {
     return;
   }
   record.slug = nextSlug;
+  try {
+    const savedRestaurant = await saveRestaurantOnApi(record);
+    Object.assign(record, savedRestaurant, { categories: record.categories, items: record.items });
+    apiRestaurantsSynced = false;
+  } catch (error) {
+    console.warn("Restaurant was saved locally:", error.message);
+  }
   elements.coverInput.value = "";
   elements.logoInput.value = "";
   saveState();
@@ -2114,7 +2223,7 @@ elements.authLoginForm.addEventListener("submit", (event) => {
   renderAll();
 });
 
-elements.authSignupForm.addEventListener("submit", (event) => {
+elements.authSignupForm.addEventListener("submit", async (event) => {
   event.preventDefault();
   const name = elements.signupRestaurantInput.value.trim();
   const email = elements.signupEmailInput.value.trim();
@@ -2131,8 +2240,14 @@ elements.authSignupForm.addEventListener("submit", (event) => {
     return;
   }
   const today = dateInputValue();
-  const record = createRestaurantRecord(name, slug, email, password);
+  let record = createRestaurantRecord(name, slug, email, password);
   record.license = normalizeLicense({ start: today, end: addMonthsToDate(today, 1) });
+  try {
+    record = await createRestaurantOnApi(record);
+    apiRestaurantsSynced = false;
+  } catch (error) {
+    console.warn("Restaurant was created locally:", error.message);
+  }
   state.restaurants.push(record);
   saveState();
   isLoggedIn = true;
@@ -2170,16 +2285,22 @@ elements.showCreateRestaurantButton.addEventListener("click", () => {
   elements.createRestaurantPanel.classList.toggle("hidden");
 });
 
-elements.platformRestaurantForm.addEventListener("submit", (event) => {
+elements.platformRestaurantForm.addEventListener("submit", async (event) => {
   event.preventDefault();
   const name = elements.platformRestaurantNameInput.value.trim();
   const slug = slugify(elements.platformSlugInput.value || name);
   if (!name || !slug || state.restaurants.some((record) => record.slug === slug)) return;
-  const record = createRestaurantRecord(name, slug, elements.platformUsernameInput.value.trim(), elements.platformPasswordInput.value.trim());
+  let record = createRestaurantRecord(name, slug, elements.platformUsernameInput.value.trim(), elements.platformPasswordInput.value.trim());
   record.license = normalizeLicense({
     start: elements.platformLicenseStartInput.value,
     end: elements.platformLicenseEndInput.value,
   });
+  try {
+    record = await createRestaurantOnApi(record);
+    apiRestaurantsSynced = false;
+  } catch (error) {
+    console.warn("Restaurant was created locally:", error.message);
+  }
   state.restaurants.push(record);
   elements.platformRestaurantForm.reset();
   delete elements.platformSlugInput.dataset.touched;
@@ -2200,6 +2321,18 @@ elements.platformDashboardStats.addEventListener("click", (event) => {
 });
 
 elements.platformRestaurantList.addEventListener("click", async (event) => {
+  const deleteRestaurantId = event.target.dataset.deleteRestaurant;
+  if (deleteRestaurantId) {
+    const record = state.restaurants.find((entry) => entry.id === deleteRestaurantId);
+    if (!record) return;
+    openDeleteModal({
+      type: "restaurant",
+      id: deleteRestaurantId,
+      message: `${t("confirmDeleteRestaurant")} ${asText(record.restaurant.name)}`,
+    });
+    return;
+  }
+
   const toggleId = event.target.dataset.toggleDetails;
   if (toggleId) {
     const details = document.querySelector(`#details-${toggleId}`);
@@ -2216,6 +2349,12 @@ elements.platformRestaurantList.addEventListener("click", async (event) => {
     const nextPassword = input?.value.trim();
     if (!record || !nextPassword) return;
     record.password = nextPassword;
+    try {
+      await saveRestaurantOnApi(record);
+      apiRestaurantsSynced = false;
+    } catch (error) {
+      console.warn("Password was saved locally:", error.message);
+    }
     saveState();
     renderPlatform();
     showStatus("messagePasswordReset");
@@ -2232,6 +2371,12 @@ elements.platformRestaurantList.addEventListener("click", async (event) => {
       start: startInput.value,
       end: endInput.value,
     });
+    try {
+      await saveRestaurantOnApi(record);
+      apiRestaurantsSynced = false;
+    } catch (error) {
+      console.warn("License was saved locally:", error.message);
+    }
     saveState();
     renderPlatform();
     const details = document.querySelector(`#details-${saveLicenseId}`);
@@ -2305,6 +2450,24 @@ elements.confirmModal.addEventListener("click", (event) => {
 elements.confirmDeleteButton.addEventListener("click", async () => {
   const record = activeRestaurant();
   if (!pendingDelete) return;
+  if (pendingDelete.type === "restaurant") {
+    const restaurant = state.restaurants.find((entry) => entry.id === pendingDelete.id);
+    if (restaurant) {
+      try {
+        await deleteRestaurantOnApi(restaurant);
+        apiRestaurantsSynced = false;
+      } catch (error) {
+        console.warn("Restaurant was deleted locally:", error.message);
+      }
+      state.restaurants = state.restaurants.filter((entry) => entry.id !== pendingDelete.id);
+      if (!state.restaurants.length) state.restaurants.push(createRestaurantRecord("Luna Bistro", "luna-bistro", "demo@restoran.com", "123456", true));
+    }
+    closeDeleteModal();
+    saveState();
+    renderAll();
+    showStatus("messageRestaurantDeleted");
+    return;
+  }
   if (pendingDelete.type === "category") {
     try {
       await deleteCategoryOnApi(pendingDelete.id, record);

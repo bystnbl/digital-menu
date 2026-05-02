@@ -100,6 +100,14 @@ Backend endpointleri:
 - `DELETE /api/products/:id`
 - `GET /api/categories`
 - `POST /api/categories`
+- `GET /api/restaurants`
+- `GET /api/restaurants/:id`
+- `POST /api/restaurants`
+- `PUT /api/restaurants/:id`
+- `DELETE /api/restaurants/:id`
+- `POST /api/visits`
+- `GET /api/visits/summary`
+- `GET /api/visits/summary?restaurantSlug=luna-bistro`
 
 Restoran bazlı veri için frontend isteklerde `restaurantSlug` kullanır:
 
@@ -109,6 +117,15 @@ GET /api/categories?restaurantSlug=luna-bistro
 ```
 
 Frontend mevcut tasarımı bozmadan çalışır. API açıksa kategori ve ürünleri backend'den alır; API kapalıysa mevcut tarayıcı hafızasındaki demo veriyle çalışmaya devam eder.
+
+Örnek MongoDB verisi oluşturmak için:
+
+```bash
+cd "/Users/stnbl/Documents/Codex/2026-04-28/bir-proje-yapmak-istiyorum-proje-restoranlar/backend"
+npm run seed
+```
+
+Bu komut mevcut MongoDB demo kayıtlarını temizler ve 5 restoran, her restorana 5 kategori, her kategoriye 10 yemek ve örnek ziyaret kayıtları ekler.
 
 ## İçerik
 
@@ -217,9 +234,14 @@ Frontend mevcut tasarımı bozmadan çalışır. API açıksa kategori ve ürün
 - Yerel proje klasörü için hedef ad `digital menü` olarak belirlendi ve README çalıştırma komutu buna göre güncellendi.
 - MongoDB Atlas destekli Express backend eklendi.
 - Backend içinde `Product` ve `Category` Mongoose modelleri oluşturuldu.
+- Backend içinde `Restaurant` Mongoose modeli ve restoran hesabı CRUD endpointleri oluşturuldu.
 - Ürün CRUD ve kategori oluşturma/listeleme endpointleri eklendi.
-- Frontend ürün ve kategori verisi için `VITE_API_URL` üzerinden API bağlantısı eklendi.
+- Frontend restoran, ürün ve kategori verisi için `VITE_API_URL` üzerinden API bağlantısı eklendi.
 - Admin panelinde ürün/kategori ekleme, ürün güncelleme ve silme işlemleri API varsa backend'e yazacak, API yoksa eski yerel kayıt davranışıyla çalışacak şekilde düzenlendi.
+- Program yönetim panelinde restoran hesabı silme fonksiyonu eklendi.
+- MongoDB’ye 5 örnek restoran, her restorana 5 kategori ve her kategoriye 10 yemek basmak için seed komutu eklendi.
+- Ziyaret istatistikleri restoran kaydının içinde sayaç olarak tutulmak yerine ayrı `VisitLog` koleksiyonuna taşındı.
+- Dashboard istatistikleri `VisitLog` kayıtlarından bugün, son 7 gün, son 30 gün ve toplam olarak hesaplanacak şekilde güncellendi.
 
 ## Sonraki gerçek ürün adımları
 

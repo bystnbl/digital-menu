@@ -1603,6 +1603,16 @@ input[type="file"] {
   border-color: var(--accent);
 }
 
+.icon-action.danger-action {
+  color: #c2255c;
+}
+
+.icon-action.danger-action:hover {
+  color: #fff;
+  background: #c2255c;
+  border-color: #c2255c;
+}
+
 .platform-details {
   display: grid;
   gap: 12px;

@@ -39,6 +39,14 @@ http://localhost:5000
 - `DELETE /api/products/:id`
 - `GET /api/categories`
 - `POST /api/categories`
+- `GET /api/restaurants`
+- `GET /api/restaurants/:id`
+- `POST /api/restaurants`
+- `PUT /api/restaurants/:id`
+- `DELETE /api/restaurants/:id`
+- `POST /api/visits`
+- `GET /api/visits/summary`
+- `GET /api/visits/summary?restaurantSlug=luna-bistro`
 
 Restoran bazlı veri için isteklerde `restaurantSlug` query veya body alanı kullanılabilir.
 
@@ -71,3 +79,13 @@ GET /api/categories?restaurantSlug=luna-bistro
 ## Not
 
 Fotoğraflar bu aşamada mevcut frontend davranışını bozmamak için base64/data URL olarak saklanabilir. Canlı ürün aşamasında Cloudinary, S3 veya benzeri bir dosya depolama servisine taşınması önerilir.
+
+## Örnek veri oluşturma
+
+MongoDB içindeki mevcut demo restoran, kategori ve ürünleri temizleyip 5 örnek restoran oluşturmak için:
+
+```bash
+npm run seed
+```
+
+Bu komut 5 restoran, her restorana 5 kategori, her kategoriye 10 ürün ve örnek ziyaret kayıtları ekler.
